@@ -11,7 +11,7 @@ const inputRef = ref<HTMLInputElement | null>(null)
 const gameScore = ref(0)
 const activeIndex = ref(-1)
 const isGameFinished = ref(false)
-const timer = ref(20)
+const timer = ref(45) // Starting timer with 45 seconds
 let timerInterval: any = null
 
 const btnText = computed(() => {
@@ -25,7 +25,7 @@ const resetGame = () => {
   gameScore.value = 0
   activeIndex.value = -1
   isGameFinished.value = false
-  timer.value = 20
+  timer.value = 45
   clearInterval(timerInterval)
 }
 
@@ -69,7 +69,7 @@ const finishGame = async () => {
 }
 
 const startTimer = () => {
-  timer.value = 20
+  timer.value = 45 // Reset timer to 45 seconds for each question
   clearInterval(timerInterval)
   timerInterval = setInterval(() => {
     if (timer.value > 0) {
@@ -101,6 +101,7 @@ watch(activeIndex, async (newIndex) => {
       isProcessingAnswer.value = false
       answerMessage.value = ''
       pointsEarned.value = 0 // Reset points display
+      attempts.value = 0 // Reset attempts
 
       await nextTick()
       focusInput()
@@ -110,11 +111,14 @@ watch(activeIndex, async (newIndex) => {
   }
 })
 
+const isError = ref(false)
 const selectedAnswer = ref<string>('')
 const isAnswered = ref(false)
 const isProcessingAnswer = ref(false)
+const isHintVisible = ref(false)
 const answerMessage = ref('')
-const pointsEarned = ref<number>(0) // New ref to track points earned
+const pointsEarned = ref<number>(0)
+const attempts = ref<number>(0) // Counter for number of tries
 
 const focusInput = () => {
   if (inputRef.value) {
@@ -131,15 +135,22 @@ const isCorrectAnswer = (submitted: string, correct: string) => {
 }
 
 const calculatePoints = () => {
-  if (timer.value >= 17) return 100 // Answered within 3 seconds
-  else if (timer.value >= 10) return 70 // Answered within 10 seconds
-  else if (timer.value >= 5) return 40 // Answered within 5 seconds
-  return 20 // Answered in the final moments
+  let basePoints = 0
+  const divider = isHintVisible.value ? 2 : 1
+  if (timer.value >= 35) basePoints = 100 // Answered within 10 seconds
+  else if (timer.value >= 20) basePoints = 70 // Answered within 25 seconds
+  else if (timer.value >= 10) basePoints = 40 // Answered within 35 seconds
+  else basePoints = 20 // Answered in the last 10 seconds
+
+  // Deduct points for multiple attempts (e.g., 2nd try 80%, 3rd try 50%)
+  const attemptMultiplier = attempts.value === 0 ? 1 : attempts.value === 1 ? 0.8 : 0.5
+  return Math.floor(basePoints * attemptMultiplier / divider)
 }
 
 const submitAnswer = () => {
   if (!isAnswered.value && !isProcessingAnswer.value) {
     isProcessingAnswer.value = true
+    attempts.value++ // Increment attempts
     const correctAnswer = game.value.GameQuestions[activeIndex.value].Question.correct_answer
 
     if (isCorrectAnswer(selectedAnswer.value, correctAnswer)) {
@@ -148,9 +159,12 @@ const submitAnswer = () => {
       gameScore.value += points
       answerMessage.value = `Correct! You earned ${points} points!`
       isAnswered.value = true
+      isError.value = false
       showCorrectAnswer(points)
     } else {
+      isError.value = true
       answerMessage.value = 'Incorrect! Try again.'
+      selectedAnswer.value = '' // Clear the input
       isProcessingAnswer.value = false
     }
   }
@@ -165,6 +179,7 @@ const showCorrectAnswer = (points: number) => {
 
   setTimeout(() => {
     if (activeIndex.value < game.value.GameQuestions.length - 1) {
+      isHintVisible.value = false
       activeIndex.value += 1
       startTimer()
     } else {
@@ -172,13 +187,23 @@ const showCorrectAnswer = (points: number) => {
     }
   }, 3000)
 }
+
+const pass = () => {
+  if (!isAnswered.value) {
+    clearInterval(timerInterval)
+    showCorrectAnswer(0) // Treat as a timeout with 0 points
+  }
+}
+const showHint = () => {
+  isHintVisible.value = true
+}
 </script>
 
 <template>
   <div class="home">
     <div v-if="!game && !isGameFinished">
-      <h1>Welcome!</h1>
-      <h4>Press Start Game Button to play</h4>
+      <h1 class="text-3xl">Welcome!</h1>
+      <h4 class="text-xl mt-4">Press Start Game Button to play</h4>
     </div>
 
     <div v-if="isGameFinished">
@@ -195,17 +220,22 @@ const showCorrectAnswer = (points: number) => {
           {{ activeIndex + 1 }}. Кто исполняет песню?
         </div>
         <div class="game__answer mt-6">
-          <p>{{ answerMessage }}</p>
+          <p class="text-xl font-bold" :class="isError ? 'text-red-500' : 'text-green-500'">{{ answerMessage }}</p>
         </div>
         <div v-if="pointsEarned" class="game__points mt-2 text-green-600">
           You earned: {{ pointsEarned }} points!
+        </div>
+        <div v-if="isHintVisible" class="mt-2 italic text-lg">
+          Song name: {{ game.GameQuestions[activeIndex].Question.text }}
         </div>
         <div class="game__audio flex justify-center mt-4">
           <audio v-show="game && game.GameQuestions[activeIndex]" ref="audioRef" controls />
         </div>
         <div class="game__input flex flex-col mt-4">
           <input v-model="selectedAnswer" ref="inputRef" placeholder="Enter your answer" class="input-text" @keydown.enter="submitAnswer" :disabled="isAnswered || isProcessingAnswer" />
-          <button class="btn btn-blue w-4/6 mx-auto mt-4" @click="submitAnswer" :disabled="isAnswered || isProcessingAnswer">Submit</button>
+          <button class="btn btn-blue w-4/6 mx-auto mt-6" @click="submitAnswer" :disabled="isAnswered || isProcessingAnswer">Submit</button>
+          <button class="btn btn-warning w-4/6 mx-auto mt-4" @click="showHint" :disabled="isAnswered || isProcessingAnswer">Hint</button>
+          <button class="btn btn-danger w-4/6 mx-auto mt-4" :disabled="isAnswered || isProcessingAnswer" @click="pass">Pass</button>
         </div>
       </div>
     </div>
@@ -218,6 +248,8 @@ const showCorrectAnswer = (points: number) => {
 
 <style>
 .home {
+  margin: 0 auto;
+  max-width: 720px;
   h1, h4 {
     text-align: center;
   }
