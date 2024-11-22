@@ -14,9 +14,12 @@ export default defineConfig({
     }
   },
   server: {
+	  host: '0.0.0.0', // Listen on all network interfaces
+	       port: 5173, // Optionally, you can specify the port
+	           strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000', // your backend server URL
+        target: 'http://185.146.1.122:3000', // your backend server URL
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

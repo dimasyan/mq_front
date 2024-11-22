@@ -13,5 +13,5 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(VueTelegramPlugin)
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = 'https://dimashbratan.kz:3000'
 app.mount('#app')
