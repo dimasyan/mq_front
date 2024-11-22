@@ -267,7 +267,7 @@ const endGameMsg = computed(() => {
             v-model="selectedAnswer"
             ref="inputRef"
             placeholder="Enter your answer"
-            class="input-text dark:text-black"
+            class="input-text"
             @keydown.enter="submitAnswer"
             :disabled="isAnswered || isProcessingAnswer"
           />
@@ -327,6 +327,8 @@ const endGameMsg = computed(() => {
     border: 1px solid black;
     padding: 12px;
     border-radius: 6px;
+    color: var(--tg-theme-text-color);
+    background: var(--tg-theme-section-bg-color);
   }
 }
 </style>
