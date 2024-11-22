@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useWebApp } from 'vue-tg'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
 import { ClockIcon } from '@heroicons/vue/24/solid'
@@ -211,23 +211,35 @@ const showHint = () => {
   isHintVisible.value = true
 }
 
-onMounted(() => {
-  console.log(useWebApp.initDataUnsafe)
-  console.log(useWebApp)
+const endGameMsg = computed(() => {
+  const username = useWebApp().initDataUnsafe.user.username
+  let rang = 'мешок'
+  if (gameScore.value > 400 && gameScore.value <= 800) {
+    rang = 'молодец'
+  } else if (gameScore.value > 800) {
+    rang = 'красавчик'
+  }
+
+  return `${username}, ты - ${rang} ))`
 })
 </script>
 
 <template>
   <div class="home">
     <div v-if="!game && !isGameFinished">
-      <h1 class="text-3xl">Welcome!</h1>
+      <h1 class="text-3xl">Welcome, {{ useWebApp().initDataUnsafe.user.username }}!</h1>
       <h4 class="text-xl mt-4">Press Start Game Button to play</h4>
-      <div> {{ useWebApp.initDataUnsafe }} </div>
     </div>
 
     <div v-if="isGameFinished">
       <h1>Game Finished!</h1>
       <h4>Your score: {{ gameScore }}</h4>
+      <h4 class="mt-3">{{ endGameMsg }}</h4>
+      <div class="mt-6">
+        <img v-if="gameScore <= 400" class="block mx-auto" src="@/assets/loser.gif" alt="result" />
+        <img v-else-if="gameScore > 400 && gameScore <= 800" class="block mx-auto" src="@/assets/tight.gif" alt="result" />
+        <img v-if="gameScore > 800" class="block mx-auto" src="@/assets/cold.gif" alt="result" />
+      </div>
     </div>
 
     <div v-if="game && !isGameFinished">
