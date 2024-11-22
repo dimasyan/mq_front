@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useWebApp } from 'vue-tg'
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
 import { ClockIcon } from '@heroicons/vue/24/solid'
@@ -210,6 +210,11 @@ const pass = () => {
 const showHint = () => {
   isHintVisible.value = true
 }
+
+onMounted(() => {
+  console.log(useWebApp.initDataUnsafe)
+  console.log(useWebApp)
+})
 </script>
 
 <template>
@@ -246,7 +251,14 @@ const showHint = () => {
           <audio v-show="game && game.GameQuestions[activeIndex]" ref="audioRef" controls />
         </div>
         <div class="game__input flex flex-col mt-4">
-          <input v-model="selectedAnswer" ref="inputRef" placeholder="Enter your answer" class="input-text" @keydown.enter="submitAnswer" :disabled="isAnswered || isProcessingAnswer" />
+          <input
+            v-model="selectedAnswer"
+            ref="inputRef"
+            placeholder="Enter your answer"
+            class="input-text dark:text-black"
+            @keydown.enter="submitAnswer"
+            :disabled="isAnswered || isProcessingAnswer"
+          />
           <button class="btn btn-blue w-4/6 mx-auto mt-6" @click="submitAnswer" :disabled="isAnswered || isProcessingAnswer">Submit</button>
           <button class="btn btn-warning w-4/6 mx-auto mt-4" @click="showHint" :disabled="isAnswered || isProcessingAnswer">Hint</button>
           <button class="btn btn-danger w-4/6 mx-auto mt-4" :disabled="isAnswered || isProcessingAnswer" @click="pass">Pass</button>
