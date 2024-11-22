@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MainButton } from 'vue-tg'
+import { useWebApp } from 'vue-tg'
 import { computed, nextTick, ref, watch } from 'vue'
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
@@ -126,11 +126,24 @@ const focusInput = () => {
   }
 }
 
+const normalizeString = (str: string) => {
+  return str
+    .toLowerCase() // Convert to lowercase
+    .normalize('NFD') // Normalize to decompose special characters
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
+    .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+    .replace(/\s+and\s+/g, ' ') // Replace "and" with a single space
+    .replace(/\s+/g, ' ') // Normalize multiple spaces to a single space
+    .trim();
+}
 const isCorrectAnswer = (submitted: string, correct: string) => {
+  const normalizedSubmitted = normalizeString(submitted);
+  const normalizedCorrect = normalizeString(correct);
+
   const similarity = stringSimilarity.compareTwoStrings(
-    submitted.toLowerCase(),
-    correct.toLowerCase()
-  )
+    normalizedSubmitted,
+    normalizedCorrect
+  );
   return similarity >= 0.7 || submitted.toLowerCase() === correct.toLowerCase()
 }
 
@@ -143,7 +156,7 @@ const calculatePoints = () => {
   else basePoints = 20 // Answered in the last 10 seconds
 
   // Deduct points for multiple attempts (e.g., 2nd try 80%, 3rd try 50%)
-  const attemptMultiplier = attempts.value === 0 ? 1 : attempts.value === 1 ? 0.8 : 0.5
+  const attemptMultiplier = attempts.value === 1 ? 1 : (attempts.value === 2 ? 0.8 : 0.5)
   return Math.floor(basePoints * attemptMultiplier / divider)
 }
 
@@ -204,6 +217,7 @@ const showHint = () => {
     <div v-if="!game && !isGameFinished">
       <h1 class="text-3xl">Welcome!</h1>
       <h4 class="text-xl mt-4">Press Start Game Button to play</h4>
+      <div> {{ useWebApp.initDataUnsafe }} </div>
     </div>
 
     <div v-if="isGameFinished">
@@ -241,7 +255,6 @@ const showHint = () => {
     </div>
 
     <button class="btn btn-success mt-16 mx-auto block" @click="handleMainBtn">{{ btnText }}</button>
-    <MainButton :text="btnText" @click="handleMainBtn" />
   </div>
 </template>
 
