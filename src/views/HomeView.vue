@@ -41,7 +41,11 @@ const handleMainBtn = () => {
 
 const createGame = async () => {
   try {
-    const response = await axios.post('/api/newgame')
+    const payload = {
+      tg_username: useWebApp().initDataUnsafe.user.username,
+      tg_id: useWebApp().initDataUnsafe.user.id,
+    }
+    const response = await axios.post('/api/newgame', payload)
     game.value = response.data.game
     activeIndex.value = 0
     gameScore.value = 0
