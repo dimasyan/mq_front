@@ -217,14 +217,14 @@ const showHint = () => {
 
 const endGameMsg = computed(() => {
   const username = useWebApp().initDataUnsafe.user.username
-  let rang = 'мешок'
+  let rang = '🗿🗿🗿'
   if (gameScore.value > 400 && gameScore.value <= 800) {
-    rang = 'молодец'
+    rang = '🤠🤠🤠'
   } else if (gameScore.value > 800) {
-    rang = 'красавчик'
+    rang = '🔥🔥🔥'
   }
 
-  return `${username}, ты - ${rang} ))`
+  return `${username} ${rang}`
 })
 </script>
 
@@ -240,9 +240,11 @@ const endGameMsg = computed(() => {
       <h4>Your score: {{ gameScore }}</h4>
       <h4 class="mt-3">{{ endGameMsg }}</h4>
       <div class="mt-6">
-        <img v-if="gameScore <= 400" class="block mx-auto" src="@/assets/loser.gif" alt="result" />
-        <img v-else-if="gameScore > 400 && gameScore <= 800" class="block mx-auto" src="@/assets/tight.gif" alt="result" />
-        <img v-if="gameScore > 800" class="block mx-auto" src="@/assets/cold.gif" alt="result" />
+        <img v-if="gameScore <= 400" class="block mx-auto" src="@/assets/hans.gif" alt="result" />
+        <img v-else-if="gameScore > 400 && gameScore <= 600" class="block mx-auto" src="@/assets/dolj.gif" alt="result" />
+        <img v-else-if="gameScore > 600 && gameScore <= 750" class="block mx-auto" src="@/assets/tight.gif" alt="result" />
+        <img v-else-if="gameScore > 750 && gameScore < 900" class="block mx-auto" src="@/assets/cold.gif" alt="result" />
+        <img v-else-if="gameScore >= 900" class="block mx-auto" src="@/assets/michael.gif" alt="result" />
       </div>
     </div>
 
