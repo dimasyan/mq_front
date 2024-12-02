@@ -128,6 +128,8 @@ const normalizeString = (input: string): string => {
 const isCorrectAnswer = (submitted: string, correct: string) => {
   const normalizedSubmitted = normalizeString(submitted);
   const normalizedCorrect = normalizeString(correct);
+  console.log(submitted, correct)
+  console.log(normalizedSubmitted, normalizedCorrect)
 
   const similarity = stringSimilarity.compareTwoStrings(
     normalizedSubmitted,
