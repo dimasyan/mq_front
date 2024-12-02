@@ -251,7 +251,8 @@ const endGameMsg = computed(() => {
           You earned: {{ pointsEarned }} points!
         </div>
         <div v-if="isHintVisible" class="mt-2 italic text-lg">
-          Режиссер: {{ game.gameQuestions[activeIndex].director }}
+          <p class="mb-1.5 mt-1"> Режиссер: {{ game.gameQuestions[activeIndex].director }} </p>
+          <p class="mb-1.5 mt-1"> Жанр: {{ game.gameQuestions[activeIndex].genres }} </p>
         </div>
         <div class="game__input flex flex-col mt-4">
           <input
