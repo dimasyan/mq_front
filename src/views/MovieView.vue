@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useWebApp } from 'vue-tg'
 import { computed, nextTick, ref, watch } from 'vue'
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
@@ -203,7 +202,7 @@ const showHint = () => {
 }
 
 const endGameMsg = computed(() => {
-  const username = useWebApp().initDataUnsafe.user.username
+  //const username = useWebApp().initDataUnsafe.user.username
   let rang = '🗿🗿🗿'
   if (gameScore.value > 400 && gameScore.value <= 800) {
     rang = '🤠🤠🤠'
@@ -211,14 +210,14 @@ const endGameMsg = computed(() => {
     rang = '🔥🔥🔥'
   }
 
-  return `${username} ${rang}`
+  return rang
 })
 </script>
 
 <template>
   <div class="home">
     <div v-if="!game && !isGameFinished">
-      <h1 class="text-3xl">Welcome, {{ useWebApp().initDataUnsafe.user.username }}!</h1>
+      <h1 class="text-3xl">Welcome</h1>
       <h4 class="text-xl mt-4">Press Start Game Button to play</h4>
     </div>
 
