@@ -118,9 +118,9 @@ const focusInput = () => {
 
 const normalizeString = (input: string): string => {
   return input
-    .normalize('NFD') // Normalize to decompose characters (e.g., é -> e + ́)
+    .normalize('NFD') // Normalize to decompose characters
     .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
-    .replace(/[^\w\s]|_/g, '') // Remove non-alphanumeric characters
+    .replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s]/g, '') // Allow Latin, Cyrillic, digits, and spaces
     .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
     .trim() // Remove leading and trailing whitespace
     .toLowerCase(); // Convert to lowercase
