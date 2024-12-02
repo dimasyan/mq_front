@@ -116,16 +116,15 @@ const focusInput = () => {
   }
 }
 
-const normalizeString = (str: string) => {
-  return str
-    .toLowerCase() // Convert to lowercase
-    .normalize('NFD') // Normalize to decompose special characters
+const normalizeString = (input: string): string => {
+  return input
+    .normalize('NFD') // Normalize to decompose characters (e.g., é -> e + ́)
     .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
-    .replace(/[^a-z0-9\s]/g, '') // Remove special characters
-    .replace(/\s+and\s+/g, ' ') // Replace "and" with a single space
-    .replace(/\s+/g, ' ') // Normalize multiple spaces to a single space
-    .trim();
-}
+    .replace(/[^\w\s]|_/g, '') // Remove non-alphanumeric characters
+    .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+    .trim() // Remove leading and trailing whitespace
+    .toLowerCase(); // Convert to lowercase
+};
 const isCorrectAnswer = (submitted: string, correct: string) => {
   const normalizedSubmitted = normalizeString(submitted);
   const normalizedCorrect = normalizeString(correct);
