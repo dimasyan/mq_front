@@ -4,6 +4,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
 import { ClockIcon } from '@heroicons/vue/24/solid'
+import { normalizeString, transliterate } from '@/utils/helper'
 
 const game = ref(null)
 const audioRef = ref<HTMLAudioElement | null>(null)
@@ -19,6 +20,7 @@ const btnText = computed(() => {
   else if (game.value) return 'Finish Game'
   return 'Start Game'
 })
+const isDev = import.meta.env.VITE_API_BASE_URL === 'dev'
 
 const resetGame = () => {
   game.value = null
@@ -130,25 +132,25 @@ const focusInput = () => {
   }
 }
 
-const normalizeString = (str: string) => {
-  return str
-    .toLowerCase() // Convert to lowercase
-    .normalize('NFD') // Normalize to decompose special characters
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
-    .replace(/[^a-z0-9\s]/g, '') // Remove special characters
-    .replace(/\s+and\s+/g, ' ') // Replace "and" with a single space
-    .replace(/\s+/g, ' ') // Normalize multiple spaces to a single space
-    .trim();
-}
-const isCorrectAnswer = (submitted: string, correct: string) => {
+const isCorrectAnswer = (submitted: string, correct: string): boolean => {
   const normalizedSubmitted = normalizeString(submitted);
   const normalizedCorrect = normalizeString(correct);
 
-  const similarity = stringSimilarity.compareTwoStrings(
-    normalizedSubmitted,
-    normalizedCorrect
-  );
-  return similarity >= 0.7 || submitted.toLowerCase() === correct.toLowerCase()
+  // Check transliterated reverse equivalence (e.g., Latin <-> Cyrillic)
+  const reverseTransliteratedSubmitted = transliterate(normalizedSubmitted);
+  const reverseTransliteratedCorrect = transliterate(normalizedCorrect);
+
+  const similarity =
+    stringSimilarity.compareTwoStrings(normalizedSubmitted, normalizedCorrect) ||
+    stringSimilarity.compareTwoStrings(reverseTransliteratedSubmitted, normalizedCorrect) ||
+    stringSimilarity.compareTwoStrings(normalizedSubmitted, reverseTransliteratedCorrect);
+
+  return (
+    similarity >= 0.7 ||
+    normalizedSubmitted === normalizedCorrect ||
+    reverseTransliteratedSubmitted === normalizedCorrect ||
+    normalizedSubmitted === reverseTransliteratedCorrect
+  )
 }
 
 const calculatePoints = () => {

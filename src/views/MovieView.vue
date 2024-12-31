@@ -187,6 +187,7 @@ const showCorrectAnswer = (points: number) => {
       activeIndex.value += 1
       startTimer()
     } else {
+      isHintVisible.value = false
       finishGame()
     }
   }, 3000)
