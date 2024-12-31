@@ -13,5 +13,5 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(VueTelegramPlugin)
-axios.defaults.baseURL = 'https://dimashbratan.kz:3000'
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 app.mount('#app')
