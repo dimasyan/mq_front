@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-import { MainButton } from 'vue-tg'
 import { computed, nextTick, ref, watch } from 'vue'
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
 import { ClockIcon } from '@heroicons/vue/24/solid'
-import audioFile from '@/assets/Toploader - Dancing in the Moonlight.mp3'
 
 const game = ref(null)
-const audioRef = ref<HTMLAudioElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 const gameScore = ref(0)
 const activeIndex = ref(-1)
@@ -26,7 +23,7 @@ const resetGame = () => {
   gameScore.value = 0
   activeIndex.value = -1
   isGameFinished.value = false
-  timer.value = 45
+  timer.value = 60
   clearInterval(timerInterval)
 }
 
@@ -42,7 +39,7 @@ const handleMainBtn = () => {
 
 const createGame = async () => {
   try {
-    const response = await axios.post('/api/newgame')
+    const response = await axios.get('/api/newmoviegame')
     game.value = response.data.game
     activeIndex.value = 0
     gameScore.value = 0
@@ -70,7 +67,7 @@ const finishGame = async () => {
 }
 
 const startTimer = () => {
-  timer.value = 45 // Reset timer to 45 seconds for each question
+  timer.value = 60 // Reset timer to 45 seconds for each question
   clearInterval(timerInterval)
   timerInterval = setInterval(() => {
     if (timer.value > 0) {
@@ -90,25 +87,17 @@ const handleTimeout = () => {
 watch(activeIndex, async (newIndex) => {
   if (isGameFinished.value) return
 
-  if (game.value && newIndex >= 0 && game.value.GameQuestions[newIndex]) {
+  if (game.value && newIndex >= 0 && game.value.gameQuestions[newIndex]) {
     await nextTick()
-    const currentAudio = audioRef.value
-    if (currentAudio) {
-      currentAudio.src = game.value.GameQuestions[newIndex].Question.file_path
-      currentAudio.load()
-      currentAudio.play()
-      selectedAnswer.value = ''
-      isAnswered.value = false
-      isProcessingAnswer.value = false
-      answerMessage.value = ''
-      pointsEarned.value = 0 // Reset points display
-      attempts.value = 0 // Reset attempts
+    selectedAnswer.value = ''
+    isAnswered.value = false
+    isProcessingAnswer.value = false
+    answerMessage.value = ''
+    pointsEarned.value = 0 // Reset points display
+    attempts.value = 0 // Reset attempts
 
-      await nextTick()
-      focusInput()
-    } else {
-      console.error('Audio element not found')
-    }
+    await nextTick()
+    focusInput()
   }
 })
 
@@ -127,11 +116,25 @@ const focusInput = () => {
   }
 }
 
+const normalizeString = (input: string): string => {
+  return input
+    .normalize('NFD') // Normalize to decompose characters
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
+    .replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s]/g, '') // Allow Latin, Cyrillic, digits, and spaces
+    .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+    .trim() // Remove leading and trailing whitespace
+    .toLowerCase(); // Convert to lowercase
+};
 const isCorrectAnswer = (submitted: string, correct: string) => {
+  const normalizedSubmitted = normalizeString(submitted);
+  const normalizedCorrect = normalizeString(correct);
+  console.log(submitted, correct)
+  console.log(normalizedSubmitted, normalizedCorrect)
+
   const similarity = stringSimilarity.compareTwoStrings(
-    submitted.toLowerCase(),
-    correct.toLowerCase()
-  )
+    normalizedSubmitted,
+    normalizedCorrect
+  );
   return similarity >= 0.7 || submitted.toLowerCase() === correct.toLowerCase()
 }
 
@@ -144,7 +147,7 @@ const calculatePoints = () => {
   else basePoints = 20 // Answered in the last 10 seconds
 
   // Deduct points for multiple attempts (e.g., 2nd try 80%, 3rd try 50%)
-  const attemptMultiplier = attempts.value === 0 ? 1 : attempts.value === 1 ? 0.8 : 0.5
+  const attemptMultiplier = attempts.value === 1 ? 1 : (attempts.value === 2 ? 0.8 : 0.5)
   return Math.floor(basePoints * attemptMultiplier / divider)
 }
 
@@ -152,7 +155,7 @@ const submitAnswer = () => {
   if (!isAnswered.value && !isProcessingAnswer.value) {
     isProcessingAnswer.value = true
     attempts.value++ // Increment attempts
-    const correctAnswer = game.value.GameQuestions[activeIndex.value].Question.correct_answer
+    const correctAnswer = game.value.gameQuestions[activeIndex.value].answer
 
     if (isCorrectAnswer(selectedAnswer.value, correctAnswer)) {
       const points = calculatePoints()
@@ -173,17 +176,18 @@ const submitAnswer = () => {
 
 const showCorrectAnswer = (points: number) => {
   isAnswered.value = true
-  answerMessage.value += ` The correct answer was: ${game.value.GameQuestions[activeIndex.value].Question.correct_answer}.`
+  answerMessage.value += ` The correct answer was: ${game.value.gameQuestions[activeIndex.value].answer}.`
   if (points === 0) {
     answerMessage.value += ' You earned 0 points.'
   }
 
   setTimeout(() => {
-    if (activeIndex.value < game.value.GameQuestions.length - 1) {
+    if (activeIndex.value < game.value.gameQuestions.length - 1) {
       isHintVisible.value = false
       activeIndex.value += 1
       startTimer()
     } else {
+      isHintVisible.value = false
       finishGame()
     }
   }, 3000)
@@ -199,19 +203,37 @@ const showHint = () => {
   isHintVisible.value = true
 }
 
-const audio = ref(audioFile)
+const endGameMsg = computed(() => {
+  //const username = useWebApp().initDataUnsafe.user.username
+  let rang = '🗿🗿🗿'
+  if (gameScore.value > 400 && gameScore.value <= 800) {
+    rang = '🤠🤠🤠'
+  } else if (gameScore.value > 800) {
+    rang = '🔥🔥🔥'
+  }
+
+  return rang
+})
 </script>
 
 <template>
   <div class="home">
     <div v-if="!game && !isGameFinished">
-      <h1 class="text-3xl">Welcome!</h1>
+      <h1 class="text-3xl">Welcome</h1>
       <h4 class="text-xl mt-4">Press Start Game Button to play</h4>
     </div>
 
     <div v-if="isGameFinished">
       <h1>Game Finished!</h1>
       <h4>Your score: {{ gameScore }}</h4>
+      <h4 class="mt-3">{{ endGameMsg }}</h4>
+      <div class="mt-6">
+        <img v-if="gameScore <= 400" class="block mx-auto" src="@/assets/hans.gif" alt="result" />
+        <img v-else-if="gameScore > 400 && gameScore <= 600" class="block mx-auto" src="@/assets/dolj.gif" alt="result" />
+        <img v-else-if="gameScore > 600 && gameScore <= 750" class="block mx-auto" src="@/assets/tight.gif" alt="result" />
+        <img v-else-if="gameScore > 750 && gameScore < 900" class="block mx-auto" src="@/assets/cold.gif" alt="result" />
+        <img v-else-if="gameScore >= 900" class="block mx-auto" src="@/assets/michael.gif" alt="result" />
+      </div>
     </div>
 
     <div v-if="game && !isGameFinished">
@@ -220,7 +242,9 @@ const audio = ref(audioFile)
           <ClockIcon class="size-6" /> {{ timer }} sec
         </div>
         <div class="game__question mt-6">
-          {{ activeIndex + 1 }}. Кто исполняет песню?
+          <p class="mb-1.5 mt-1">Вопрос {{ activeIndex + 1 }}</p>
+          <p class="mb-1.5 mt-1">Год выпуска: {{ game.gameQuestions[activeIndex].year }}</p>
+          <p class="mb-1.5 mt-1">{{ game.gameQuestions[activeIndex].questionText  }}</p>
         </div>
         <div class="game__answer mt-6">
           <p class="text-xl font-bold" :class="isError ? 'text-red-500' : 'text-green-500'">{{ answerMessage }}</p>
@@ -229,13 +253,18 @@ const audio = ref(audioFile)
           You earned: {{ pointsEarned }} points!
         </div>
         <div v-if="isHintVisible" class="mt-2 italic text-lg">
-          Song name: {{ game.GameQuestions[activeIndex].Question.text }}
-        </div>
-        <div class="game__audio flex justify-center mt-4">
-          <audio :src="audio" controls />
+          <p class="mb-1.5 mt-1"> Режиссер: {{ game.gameQuestions[activeIndex].director }} </p>
+          <p class="mb-1.5 mt-1"> Жанр: {{ game.gameQuestions[activeIndex].genres }} </p>
         </div>
         <div class="game__input flex flex-col mt-4">
-          <input v-model="selectedAnswer" ref="inputRef" placeholder="Enter your answer" class="input-text" @keydown.enter="submitAnswer" :disabled="isAnswered || isProcessingAnswer" />
+          <input
+            v-model="selectedAnswer"
+            ref="inputRef"
+            placeholder="Enter your answer"
+            class="input-text"
+            @keydown.enter="submitAnswer"
+            :disabled="isAnswered || isProcessingAnswer"
+          />
           <button class="btn btn-blue w-4/6 mx-auto mt-6" @click="submitAnswer" :disabled="isAnswered || isProcessingAnswer">Submit</button>
           <button class="btn btn-warning w-4/6 mx-auto mt-4" @click="showHint" :disabled="isAnswered || isProcessingAnswer">Hint</button>
           <button class="btn btn-danger w-4/6 mx-auto mt-4" :disabled="isAnswered || isProcessingAnswer" @click="pass">Pass</button>
@@ -244,7 +273,6 @@ const audio = ref(audioFile)
     </div>
 
     <button class="btn btn-success mt-16 mx-auto block" @click="handleMainBtn">{{ btnText }}</button>
-    <MainButton :text="btnText" @click="handleMainBtn" />
   </div>
 </template>
 
@@ -293,6 +321,8 @@ const audio = ref(audioFile)
     border: 1px solid black;
     padding: 12px;
     border-radius: 6px;
+    color: var(--tg-theme-text-color);
+    background: var(--tg-theme-section-bg-color);
   }
 }
 </style>

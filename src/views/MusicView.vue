@@ -1,20 +1,25 @@
 <script lang="ts" setup>
 import { type Ref, ref } from 'vue'
-import axios from 'axios'
 import GameMain from '@/components/game/GameMain.vue'
-import type { FinishGamePayload, Game } from '@/models/game'
+import { useWebApp } from 'vue-tg'
+import axios from 'axios'
+import type { CreateGamePayload, FinishGamePayload, Game } from '@/models/game'
 
 const game: Ref<Game|null> = ref(null)
+const isDev = ref<boolean>(import.meta.env.VITE_NODE_ENV === 'dev')
 
 const createGame = async () => {
   try {
-    const response = await axios.get('/api/newmoviegame')
+    const payload: CreateGamePayload = {
+      tg_username: isDev.value ? 'developer' : useWebApp().initDataUnsafe.user.username,
+      tg_id: isDev.value ? 1 : useWebApp().initDataUnsafe.user.id,
+    }
+    const response = await axios.post('/api/newgame', payload)
     game.value = response.data.game
   } catch (error) {
     console.error('Error creating game:', error)
   }
 }
-
 const finishGame = async (score: number) => {
   if (!game.value) return
   try {
@@ -23,8 +28,8 @@ const finishGame = async (score: number) => {
       gameId: game.value.id
     }
     const response = await axios.post('/api/endgame', payload)
-    game.value = null
     console.log('Game finished:', response.data)
+    game.value = null
   } catch (error) {
     console.error('Error finishing game:', error)
   }
@@ -36,11 +41,11 @@ const resetGame = () => {
 </script>
 
 <template>
-  <div class="home">
+  <div class="music">
     <game-main
       :game="game"
-      :is-dev="true"
-      type="movie"
+      :is-dev="isDev"
+      type="music"
       @create-game="createGame"
       @finish-game="finishGame"
       @reset-game="resetGame"
@@ -49,9 +54,12 @@ const resetGame = () => {
 </template>
 
 
-<style scoped lang="scss">
-.home {
+<style>
+.music {
   margin: 0 auto;
   max-width: 720px;
+  h1, h4 {
+    text-align: center;
+  }
 }
 </style>

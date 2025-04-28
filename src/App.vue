@@ -4,7 +4,7 @@ import { onMounted } from 'vue'
 import { useWebAppTheme } from 'vue-tg'
 
 const applyDarkMode = () => {
-  const prefersDark = useWebAppTheme().colorScheme === 'dark'
+  const prefersDark = useWebAppTheme().colorScheme.value === 'dark'
   const html = document.documentElement;
 
   if (prefersDark) {
