@@ -313,7 +313,7 @@ function clickOutside(e: MouseEvent) {
       </section>
     </div>
     <footer class="flex justify-center flex-col sm:flex-row w-full text-center py-6 bg-gradient-to-t from-gray-50 via-white to-gray-100 mt-12">
-      <div class="logo w-24 sm:mr-5 mx-auto">
+      <div class="logo w-24 sm:mr-5 mx-auto sm:ml-0">
         <img src="@/assets/logo.svg" alt="logo" />
       </div>
       <p class="text-sm text-gray-500 flex flex-col sm:flex-row content-center justify-center items-center">
