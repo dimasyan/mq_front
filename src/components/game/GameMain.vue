@@ -230,7 +230,7 @@ const submitAnswer = () => {
     if ((isSingleAnswer && matchCount === 1) || (!isSingleAnswer && matchCount > 0)) {
       const points = calculatePoints(matchCount, totalCorrectParts.length)
       pointsEarned.value = points
-      gameScore.value += points
+      gameScore.value += points   // <-- Keep this here for score accumulation
       answerMessage.value = `Correct! You earned ${points} points!`
       isAnswered.value = true
       isError.value = false
@@ -296,12 +296,9 @@ const username = computed((): string => {
 })
 
 const correctAnswer = computed(() => {
-  const idx = props.activeIndex?.value ?? props.activeIndex ?? 0;
-
-  const answer = props.game?.gameQuestions?.[idx]?.answer || '';
-  console.log('ActiveIndex:', idx, 'Answer:', answer);
-  return answer;
-});
+  if (!props.game || activeIndex.value < 0 || activeIndex.value >= props.game.gameQuestions.length) return ''
+  return props.game.gameQuestions[activeIndex.value].answer || ''
+})
 
 const expectedArtists = computed(() => {
   return correctAnswer.value
