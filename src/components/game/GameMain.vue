@@ -218,24 +218,26 @@ const calculatePoints = (matchCount: number, totalCount: number): number => {
 const submitAnswer = () => {
   if (!isAnswered.value && !isProcessingAnswer.value) {
     isProcessingAnswer.value = true
-    attempts.value++ // Increment attempts
+
     const correctAnswer = props.game?.gameQuestions[activeIndex.value].answer || ''
     const totalCorrectParts = correctAnswer.split(';').map(p => p.trim()).filter(Boolean)
 
     const matchCount = getMatchedArtistCount(selectedAnswer.value, correctAnswer)
 
-    // If it's a single-answer question, use old behavior
     const isSingleAnswer = totalCorrectParts.length === 1
 
     if ((isSingleAnswer && matchCount === 1) || (!isSingleAnswer && matchCount > 0)) {
       const points = calculatePoints(matchCount, totalCorrectParts.length)
       pointsEarned.value = points
-      gameScore.value += points   // <-- Keep this here for score accumulation
+      gameScore.value += points
+      attempts.value++  // <--- Move increment here *after* points calculation
+
       answerMessage.value = `Correct! You earned ${points} points!`
       isAnswered.value = true
       isError.value = false
       showCorrectAnswer(points)
     } else {
+      attempts.value++  // Increment attempts on incorrect as well
       isError.value = true
       answerMessage.value = 'Incorrect! Try again.'
       selectedAnswer.value = ''
@@ -243,6 +245,7 @@ const submitAnswer = () => {
     }
   }
 }
+
 
 const showCorrectAnswer = (points: number) => {
   isAnswered.value = true
