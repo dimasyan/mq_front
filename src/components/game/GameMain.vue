@@ -209,7 +209,7 @@ const calculatePoints = (matchCount: number, totalCount: number): number => {
   else if (timer.value >= 10) basePerArtist = 20
   else basePerArtist = 10
 
-  const attemptMultiplier = attempts.value === 1 ? 1 : (attempts.value === 2 ? 0.8 : 0.5)
+  const attemptMultiplier = attempts.value <= 1 ? 1 : (attempts.value === 2 ? 0.8 : 0.5)
 
   const rawPoints = basePerArtist * matchCount
   return Math.floor(rawPoints * attemptMultiplier / divider)
