@@ -296,7 +296,11 @@ const username = computed((): string => {
 })
 
 const correctAnswer = computed(() => {
-  return props.game?.gameQuestions[props.activeIndex]?.answer || '';
+  const idx = props.activeIndex?.value ?? props.activeIndex ?? 0;
+
+  const answer = props.game?.gameQuestions?.[idx]?.answer || '';
+  console.log('ActiveIndex:', idx, 'Answer:', answer);
+  return answer;
 });
 
 const expectedArtists = computed(() => {
