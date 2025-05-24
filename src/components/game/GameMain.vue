@@ -165,17 +165,54 @@ const isCorrectAnswer = (submitted: string, correct: string): boolean => {
   )
 }
 
-const calculatePoints = (): number => {
-  let basePoints = 0
-  const divider = isHintVisible.value ? 2 : 1
-  if (timer.value >= 35) basePoints = 100 // Answered within 10 seconds
-  else if (timer.value >= 20) basePoints = 70 // Answered within 25 seconds
-  else if (timer.value >= 10) basePoints = 40 // Answered within 35 seconds
-  else basePoints = 20 // Answered in the last 10 seconds
+const getMatchedArtistCount = (submitted: string, correct: string): number => {
+  const correctParts = correct
+    .split(';')
+    .map(p => p.trim())
+    .filter(Boolean)
 
-  // Deduct points for multiple attempts (e.g., 2nd try 80%, 3rd try 50%)
+  // If just one correct answer — fallback to old logic
+  if (correctParts.length === 1) {
+    return isCorrectAnswer(submitted, correctParts[0]) ? 1 : 0
+  }
+
+  // Normalize user input into possible guesses
+  const submittedParts = normalizeString(submitted)
+    .split(/[\s,;]+/)
+    .filter(Boolean)
+
+  let matchCount = 0
+  const matched = new Set()
+
+  for (const correctItem of correctParts) {
+    for (const submittedItem of submittedParts) {
+      if (
+        isCorrectAnswer(submittedItem, correctItem) &&
+        !matched.has(correctItem)
+      ) {
+        matchCount++
+        matched.add(correctItem)
+        break
+      }
+    }
+  }
+
+  return matchCount
+}
+
+const calculatePoints = (matchCount: number, totalCount: number): number => {
+  const divider = isHintVisible.value ? 2 : 1
+
+  let basePerArtist = 0
+  if (timer.value >= 35) basePerArtist = 60
+  else if (timer.value >= 20) basePerArtist = 40
+  else if (timer.value >= 10) basePerArtist = 20
+  else basePerArtist = 10
+
   const attemptMultiplier = attempts.value === 1 ? 1 : (attempts.value === 2 ? 0.8 : 0.5)
-  return Math.floor(basePoints * attemptMultiplier / divider)
+
+  const rawPoints = basePerArtist * matchCount
+  return Math.floor(rawPoints * attemptMultiplier / divider)
 }
 
 const submitAnswer = () => {
@@ -183,9 +220,15 @@ const submitAnswer = () => {
     isProcessingAnswer.value = true
     attempts.value++ // Increment attempts
     const correctAnswer = props.game?.gameQuestions[activeIndex.value].answer || ''
+    const totalCorrectParts = correctAnswer.split(';').map(p => p.trim()).filter(Boolean)
 
-    if (isCorrectAnswer(selectedAnswer.value, correctAnswer)) {
-      const points = calculatePoints()
+    const matchCount = getMatchedArtistCount(selectedAnswer.value, correctAnswer)
+
+    // If it's a single-answer question, use old behavior
+    const isSingleAnswer = totalCorrectParts.length === 1
+
+    if ((isSingleAnswer && matchCount === 1) || (!isSingleAnswer && matchCount > 0)) {
+      const points = calculatePoints(matchCount, totalCorrectParts.length)
       pointsEarned.value = points
       gameScore.value += points
       answerMessage.value = `Correct! You earned ${points} points!`
@@ -195,7 +238,7 @@ const submitAnswer = () => {
     } else {
       isError.value = true
       answerMessage.value = 'Incorrect! Try again.'
-      selectedAnswer.value = '' // Clear the input
+      selectedAnswer.value = ''
       isProcessingAnswer.value = false
     }
   }
@@ -203,7 +246,14 @@ const submitAnswer = () => {
 
 const showCorrectAnswer = (points: number) => {
   isAnswered.value = true
-  answerMessage.value += ` The correct answer was: ${props.game?.gameQuestions[activeIndex.value].answer}.`
+  const rawAnswer = props.game?.gameQuestions[activeIndex.value].answer || ''
+  const formattedAnswer = rawAnswer
+    .split(';')
+    .map(part => part.trim())
+    .filter(Boolean)
+    .join(' feat. ')
+
+  answerMessage.value += ` The correct answer was: ${formattedAnswer}.`
   if (points === 0) {
     answerMessage.value += ' You earned 0 points.'
   }
@@ -244,6 +294,22 @@ const endGameMsg = computed((): string => {
 const username = computed((): string => {
   return props.isDev ? 'Developer' : useWebApp().initDataUnsafe.user.username
 })
+
+const correctAnswer = computed(() => {
+  return props.game?.gameQuestions[props.activeIndex]?.answer || '';
+});
+
+const expectedArtists = computed(() => {
+  return correctAnswer.value
+    .split(';')
+    .map(a => a.trim().toLowerCase())
+    .filter(Boolean);
+});
+
+const questionText = computed(() => {
+  const count = expectedArtists.value.length;
+  return count === 1 ? 'Кто исполняет песню?' : `Кто (${count}) исполняет песню?`;
+});
 </script>
 
 <template>
@@ -258,7 +324,7 @@ const username = computed((): string => {
           <ClockIcon class="size-6" /> {{ timer }} sec
         </div>
         <div v-if="type === 'music'" class="game__question mt-6">
-          {{ activeIndex + 1 }}. Кто исполняет песню?
+          {{ activeIndex + 1 }}. {{ questionText }}
         </div>
         <div v-if="type === 'movie'" class="game__question mt-6">
           <p class="mb-1.5 mt-1">Вопрос {{ activeIndex + 1 }}</p>
