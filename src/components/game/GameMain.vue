@@ -202,17 +202,26 @@ const getMatchedArtistCount = (submitted: string, correct: string): number => {
 
 const calculatePoints = (matchCount: number, totalCount: number): number => {
   const divider = isHintVisible.value ? 2 : 1
+  const isSingleArtist = totalCount === 1
+  const isFirstAttempt = attempts.value <= 1
 
-  let basePerArtist = 0
-  if (timer.value >= 35) basePerArtist = 60
-  else if (timer.value >= 20) basePerArtist = 40
-  else if (timer.value >= 10) basePerArtist = 20
-  else basePerArtist = 10
+  let basePoints = 0
 
-  const attemptMultiplier = attempts.value <= 1 ? 1 : (attempts.value === 2 ? 0.8 : 0.5)
+  if (isSingleArtist && matchCount === 1 && isFirstAttempt && timer.value >= 35) {
+    basePoints = 100
+  } else {
+    let basePerArtist = 0
+    if (timer.value >= 35) basePerArtist = 60
+    else if (timer.value >= 20) basePerArtist = 40
+    else if (timer.value >= 10) basePerArtist = 20
+    else basePerArtist = 10
 
-  const rawPoints = basePerArtist * matchCount
-  return Math.floor(rawPoints * attemptMultiplier / divider)
+    basePoints = basePerArtist * matchCount
+  }
+
+  const attemptMultiplier = isFirstAttempt ? 1 : (attempts.value === 2 ? 0.8 : 0.5)
+
+  return Math.floor(basePoints * attemptMultiplier / divider)
 }
 
 const submitAnswer = () => {
