@@ -1,14 +1,14 @@
 export const normalizeString = (str: string) => {
-  const transliteratedStr = transliterate(str);
-  return transliteratedStr
-    .toLowerCase() // Convert to lowercase
-    .normalize('NFD') // Normalize to decompose special characters
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
-    .replace(/[^a-z0-9\s]/g, '') // Remove special characters
-    .replace(/\s+and\s+/g, ' ') // Replace "and" with a single space
-    .replace(/\s+/g, ' ') // Normalize multiple spaces to a single space
+  return str
+    .toLowerCase()
+    .normalize('NFD') // Normalize accents
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+    .replace(/[^a-z0-9\s]/gi, '') // Remove non-word characters (leave both cases for now)
+    .replace(/\s+(and|&|feat|ft)\s+/g, ' ') // Handle connectors
+    .replace(/\s+/g, ' ') // Collapse spaces
     .trim();
-}
+};
+
 
 export const transliterate = (str: string): string => {
   const cyrillicToLatinMap: Record<string, string> = {

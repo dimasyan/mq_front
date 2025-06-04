@@ -148,21 +148,30 @@ const isCorrectAnswer = (submitted: string, correct: string): boolean => {
   const normalizedSubmitted = normalizeString(submitted);
   const normalizedCorrect = normalizeString(correct);
 
-  // Check transliterated reverse equivalence (e.g., Latin <-> Cyrillic)
-  const reverseTransliteratedSubmitted = transliterate(normalizedSubmitted);
-  const reverseTransliteratedCorrect = transliterate(normalizedCorrect);
+  const variants = new Set([
+    normalizedSubmitted,
+    normalizeString(transliterate(submitted)),
+    transliterate(normalizedSubmitted),
+    normalizeString(transliterate(correct)),
+    transliterate(normalizedCorrect),
+    normalizedCorrect
+  ]);
 
-  const similarity =
-    stringSimilarity.compareTwoStrings(normalizedSubmitted, normalizedCorrect) ||
-    stringSimilarity.compareTwoStrings(reverseTransliteratedSubmitted, normalizedCorrect) ||
-    stringSimilarity.compareTwoStrings(normalizedSubmitted, reverseTransliteratedCorrect);
+  // Fast exact match in any variant
+  if (variants.has(normalizedCorrect) || variants.has(normalizedSubmitted)) {
+    return true;
+  }
 
-  return (
-    similarity >= 0.7 ||
-    normalizedSubmitted === normalizedCorrect ||
-    reverseTransliteratedSubmitted === normalizedCorrect ||
-    normalizedSubmitted === reverseTransliteratedCorrect
-  )
+  // Compute best fuzzy similarity across all pairs
+  let bestScore = 0;
+  for (const submittedVariant of variants) {
+    for (const correctVariant of variants) {
+      const score = stringSimilarity.compareTwoStrings(submittedVariant, correctVariant);
+      bestScore = Math.max(bestScore, score);
+    }
+  }
+
+  return bestScore >= 0.6; // More forgiving threshold
 }
 
 const getMatchedArtistCount = (submitted: string, correct: string): number => {
