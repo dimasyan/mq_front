@@ -49,7 +49,7 @@ const checkSubscription = async () => {
       telegramUser: isDev.value ? null : { id: user.id },
     }
     const response = await axios.post('/api/auth', payload)
-    isSubscribed.value = response.data.isSubscribed
+    isSubscribed.value = response.data.success
 
     if (isSubscribed.value) {
       await createGame()
@@ -86,9 +86,9 @@ const openTelegramChannel = () => {
     </div>
 
     <!-- User is NOT subscribed -->
-    <div v-else-if="isSubscribed === false" class="subscription-warning p-5">
+    <div v-else-if="isSubscribed === false" class="subscription-warning p-5 block">
       <p class="text-center">To play the game, please join our Telegram channel:</p>
-      <button @click="openTelegramChannel" class="btn btn-blue w-4/6 mx-auto">
+      <button @click="openTelegramChannel" class="btn btn-blue w-4/6 mx-auto mt-4">
         Join Channel in Telegram
       </button>
       <button @click="checkSubscription" class="btn btn-success w-4/6 mx-auto mt-2">
