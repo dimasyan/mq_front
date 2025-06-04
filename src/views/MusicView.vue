@@ -48,10 +48,15 @@ const checkSubscription = async () => {
     const payload = {
       telegramUser: isDev.value ? null : { id: user.id },
     }
-    const response = await axios.post('/api/auth', payload)
-    isSubscribed.value = response.data.success
+    const response = await axios.post('/api/auth', payload, {
+      validateStatus: () => true, // <- allow all responses through to `then`
+    })
 
-    if (!isSubscribed.value) {
+    if (response.status === 200 && response.data.success === true) {
+      isSubscribed.value = true
+      await createGame()
+    } else {
+      // Either not subscribed or backend rejected
       isSubscribed.value = false
     }
   } catch (error) {
