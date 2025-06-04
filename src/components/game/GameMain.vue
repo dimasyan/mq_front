@@ -162,7 +162,6 @@ const isCorrectAnswer = (submitted: string, correct: string): boolean => {
     return true;
   }
 
-  // Compute best fuzzy similarity across all pairs
   let bestScore = 0;
   for (const submittedVariant of variants) {
     for (const correctVariant of variants) {

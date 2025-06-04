@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Ref, ref } from 'vue'
+import { onMounted, type Ref, ref } from 'vue'
 import GameMain from '@/components/game/GameMain.vue'
 import { useWebApp } from 'vue-tg'
 import axios from 'axios'
@@ -7,6 +7,10 @@ import type { CreateGamePayload, FinishGamePayload, Game } from '@/models/game'
 
 const game: Ref<Game|null> = ref(null)
 const isDev = ref<boolean>(import.meta.env.VITE_NODE_ENV === 'dev')
+const isSubscribed = ref<boolean | null>(null)
+
+const webApp = useWebApp()
+const user = webApp.initDataUnsafe.user
 
 const createGame = async () => {
   try {
@@ -38,18 +42,69 @@ const finishGame = async (score: number) => {
 const resetGame = () => {
   game.value = null
 }
+
+const checkSubscription = async () => {
+  try {
+    const payload = {
+      tg_id: isDev.value ? 1 : user.id,
+    }
+    const response = await axios.post('/api/auth', payload)
+    isSubscribed.value = response.data.isSubscribed
+
+    if (isSubscribed.value) {
+      await createGame()
+    }
+  } catch (error) {
+    console.error('Subscription check failed:', error)
+    isSubscribed.value = false
+  }
+}
+
+onMounted(() => {
+  checkSubscription()
+})
+
+const joinChannelUrl = 'https://t.me/dimash_bratan_channel';
+
+const openTelegramChannel = () => {
+  if (window.Telegram?.WebApp?.openTelegramLink) {
+    window.Telegram.WebApp.openTelegramLink(joinChannelUrl);
+  } else {
+    // fallback, open in new tab if Telegram.WebApp not available
+    window.open(joinChannelUrl, '_blank');
+  }
+}
 </script>
 
 <template>
   <div class="music">
-    <game-main
-      :game="game"
-      :is-dev="isDev"
-      type="music"
-      @create-game="createGame"
-      @finish-game="finishGame"
-      @reset-game="resetGame"
-    />
+    <!-- Loading subscription status -->
+    <div v-if="isSubscribed === null" class="loading-state">
+      <p>Checking subscription status...</p>
+    </div>
+
+    <!-- User is NOT subscribed -->
+    <div v-else-if="isSubscribed === false" class="subscription-warning">
+      <p>To play the game, please join our Telegram channel:</p>
+      <button @click="openTelegramChannel" class="btn btn-primary">
+        Join Channel in Telegram
+      </button>
+      <button @click="checkSubscription" class="btn btn-outline mt-2">
+        I've Joined — Check Again
+      </button>
+    </div>
+
+    <!-- User is subscribed -->
+    <div v-else>
+      <game-main
+        :game="game"
+        :is-dev="isDev"
+        type="music"
+        @create-game="createGame"
+        @finish-game="finishGame"
+        @reset-game="resetGame"
+      />
+    </div>
   </div>
 </template>
 
