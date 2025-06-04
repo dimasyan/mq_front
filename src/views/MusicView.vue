@@ -53,6 +53,8 @@ const checkSubscription = async () => {
 
     if (isSubscribed.value) {
       await createGame()
+    } else {
+      isSubscribed.value = false
     }
   } catch (error) {
     console.error('Subscription check failed:', error)
@@ -60,8 +62,8 @@ const checkSubscription = async () => {
   }
 }
 
-onMounted(() => {
-  checkSubscription()
+onMounted(async () => {
+  await checkSubscription()
 })
 
 const joinChannelUrl = 'https://t.me/dimash_bratan_channel';
@@ -84,12 +86,12 @@ const openTelegramChannel = () => {
     </div>
 
     <!-- User is NOT subscribed -->
-    <div v-else-if="isSubscribed === false" class="subscription-warning">
-      <p>To play the game, please join our Telegram channel:</p>
-      <button @click="openTelegramChannel" class="btn btn-primary">
+    <div v-else-if="isSubscribed === false" class="subscription-warning p-5">
+      <p class="text-center">To play the game, please join our Telegram channel:</p>
+      <button @click="openTelegramChannel" class="btn btn-blue w-4/6 mx-auto">
         Join Channel in Telegram
       </button>
-      <button @click="checkSubscription" class="btn btn-outline mt-2">
+      <button @click="checkSubscription" class="btn btn-success w-4/6 mx-auto mt-2">
         I've Joined — Check Again
       </button>
     </div>

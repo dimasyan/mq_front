@@ -171,7 +171,7 @@ const isCorrectAnswer = (submitted: string, correct: string): boolean => {
     }
   }
 
-  return bestScore >= 0.7; // More strict threshold
+  return bestScore >= 0.6; // More strict threshold
 };
 
 const getMatchedArtistCount = (submitted: string, correct: string): number => {
@@ -335,7 +335,7 @@ const questionText = computed(() => {
 </script>
 
 <template>
-  <div class="game">
+  <div class="game px-4 py-6">
     <game-start v-if="!game && !isGameFinished" :username="username" />
 
     <game-results v-if="isGameFinished" :end-game-msg="endGameMsg" :game-score="gameScore" />
@@ -378,14 +378,14 @@ const questionText = computed(() => {
             @keydown.enter="submitAnswer"
             :disabled="isAnswered || isProcessingAnswer"
           />
-          <button class="btn btn-blue w-4/6 mx-auto mt-6" @click="submitAnswer" :disabled="isAnswered || isProcessingAnswer">Submit</button>
+          <button class="btn btn-success w-4/6 mx-auto mt-6 py-4" @click="submitAnswer" :disabled="isAnswered || isProcessingAnswer">Submit</button>
           <button class="btn btn-warning w-4/6 mx-auto mt-4" @click="showHint" :disabled="isAnswered || isProcessingAnswer">Hint</button>
           <button class="btn btn-danger w-4/6 mx-auto mt-4" :disabled="isAnswered || isProcessingAnswer" @click="pass">Pass</button>
         </div>
       </div>
     </div>
 
-    <button class="btn btn-success mt-16 mx-auto block" @click="handleMainBtn">{{ btnText }}</button>
+    <button class="btn btn-blue mt-16 mx-auto block" @click="handleMainBtn">{{ btnText }}</button>
   </div>
 </template>
 
