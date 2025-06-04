@@ -46,7 +46,7 @@ const resetGame = () => {
 const checkSubscription = async () => {
   try {
     const payload = {
-      tg_id: isDev.value ? 1 : user.id,
+      telegramUser: isDev.value ? null : { id: user.id },
     }
     const response = await axios.post('/api/auth', payload)
     isSubscribed.value = response.data.isSubscribed
