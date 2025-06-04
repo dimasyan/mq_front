@@ -52,9 +52,9 @@ const checkSubscription = async () => {
       validateStatus: () => true, // <- allow all responses through to `then`
     })
 
-    if (response.status === 200 && response.data.success === true) {
+    if (response.status === 200 && response.data?.success === true) {
       isSubscribed.value = true
-      await createGame()
+      // await createGame()
     } else {
       // Either not subscribed or backend rejected
       isSubscribed.value = false
