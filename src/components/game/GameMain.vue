@@ -341,7 +341,7 @@ const questionText = computed(() => {
     <game-results v-if="isGameFinished" :end-game-msg="endGameMsg" :game-score="gameScore" />
 
     <div v-if="game && !isGameFinished">
-      <div class="game text-center">
+      <div class="game text-center p-6">
         <div class="game__timer text-xl flex justify-center items-center gap-2">
           <ClockIcon class="size-6" /> {{ timer }} sec
         </div>

@@ -10,7 +10,6 @@ const isDev = ref<boolean>(import.meta.env.VITE_NODE_ENV === 'dev')
 const isSubscribed = ref<boolean | null>(null)
 
 const webApp = useWebApp()
-const user = webApp.initDataUnsafe.user
 
 const createGame = async () => {
   try {
@@ -46,7 +45,7 @@ const resetGame = () => {
 const checkSubscription = async () => {
   try {
     const payload = {
-      telegramUser: isDev.value ? null : { id: user.id },
+      telegramUser: isDev.value ? null : { id: useWebApp().initDataUnsafe.user.id },
     }
     const response = await axios.post('/api/auth', payload, {
       validateStatus: () => true, // <- allow all responses through to `then`
