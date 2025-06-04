@@ -145,33 +145,34 @@ const focusInput = () => {
 }
 
 const isCorrectAnswer = (submitted: string, correct: string): boolean => {
-  const normalizedSubmitted = normalizeString(submitted);
-  const normalizedCorrect = normalizeString(correct);
-
-  const variants = new Set([
-    normalizedSubmitted,
+  const submittedVariants = new Set([
+    normalizeString(submitted),
     normalizeString(transliterate(submitted)),
-    transliterate(normalizedSubmitted),
-    normalizeString(transliterate(correct)),
-    transliterate(normalizedCorrect),
-    normalizedCorrect
+    transliterate(normalizeString(submitted)),
   ]);
 
-  // Fast exact match in any variant
-  if (variants.has(normalizedCorrect) || variants.has(normalizedSubmitted)) {
-    return true;
+  const correctVariants = new Set([
+    normalizeString(correct),
+    normalizeString(transliterate(correct)),
+    transliterate(normalizeString(correct)),
+  ]);
+
+  // Fast exact match
+  for (const s of submittedVariants) {
+    if (correctVariants.has(s)) return true;
   }
 
+  // Fuzzy matching
   let bestScore = 0;
-  for (const submittedVariant of variants) {
-    for (const correctVariant of variants) {
-      const score = stringSimilarity.compareTwoStrings(submittedVariant, correctVariant);
+  for (const s of submittedVariants) {
+    for (const c of correctVariants) {
+      const score = stringSimilarity.compareTwoStrings(s, c);
       bestScore = Math.max(bestScore, score);
     }
   }
 
-  return bestScore >= 0.6; // More forgiving threshold
-}
+  return bestScore >= 0.7; // More strict threshold
+};
 
 const getMatchedArtistCount = (submitted: string, correct: string): number => {
   const correctParts = correct
