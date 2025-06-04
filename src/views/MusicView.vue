@@ -51,9 +51,7 @@ const checkSubscription = async () => {
     const response = await axios.post('/api/auth', payload)
     isSubscribed.value = response.data.success
 
-    if (isSubscribed.value) {
-      await createGame()
-    } else {
+    if (!isSubscribed.value) {
       isSubscribed.value = false
     }
   } catch (error) {
