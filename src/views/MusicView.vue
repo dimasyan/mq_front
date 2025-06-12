@@ -9,8 +9,6 @@ const game: Ref<Game|null> = ref(null)
 const isDev = ref<boolean>(import.meta.env.VITE_NODE_ENV === 'dev')
 const isSubscribed = ref<boolean | null>(null)
 
-const webApp = useWebApp()
-
 const createGame = async () => {
   try {
     const payload: CreateGamePayload = {
