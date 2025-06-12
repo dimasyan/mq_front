@@ -1,13 +1,14 @@
 export const normalizeString = (str: string) => {
   return str
     .toLowerCase()
-    .normalize('NFD') // Normalize accents
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-    .replace(/[^a-z0-9\s]/gi, '') // Remove non-word characters (leave both cases for now)
-    .replace(/\s+(and|&|feat|ft)\s+/g, ' ') // Handle connectors
-    .replace(/\s+/g, ' ') // Collapse spaces
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents
+    .replace(/[^\p{L}0-9\s]/gu, '')  // Keep all language letters and digits
+    .replace(/\s+(and|&|feat|ft)\s+/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
 };
+
 
 
 export const transliterate = (str: string): string => {

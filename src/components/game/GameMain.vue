@@ -162,17 +162,29 @@ const isCorrectAnswer = (submitted: string, correct: string): boolean => {
     if (correctVariants.has(s)) return true;
   }
 
-  // Fuzzy matching
+  // Fuzzy matching with stricter conditions
   let bestScore = 0;
   for (const s of submittedVariants) {
     for (const c of correctVariants) {
       const score = stringSimilarity.compareTwoStrings(s, c);
-      bestScore = Math.max(bestScore, score);
+
+      // Extra filter: ignore fuzzy match if string is too different in length or too short
+      const lengthDifference = Math.abs(s.length - c.length);
+      const minLength = Math.min(s.length, c.length);
+
+      if (
+        minLength >= 4 && // Skip too-short garbage words
+        lengthDifference <= 3 && // Skip wildly different strings
+        score > bestScore
+      ) {
+        bestScore = score;
+      }
     }
   }
 
-  return bestScore >= 0.6; // More strict threshold
+  return bestScore >= 0.75; // Stricter threshold
 };
+
 
 const getMatchedArtistCount = (submitted: string, correct: string): number => {
   const correctParts = correct
