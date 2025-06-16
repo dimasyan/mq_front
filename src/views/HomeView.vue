@@ -186,7 +186,7 @@ function clickOutside(e: MouseEvent) {
 
           <div class="bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #3: 90е и 00е</span>
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #4: Все Жанры и Эпохи</span>
             </h3>
 
             <!-- Game Info with Icons -->
@@ -194,7 +194,7 @@ function clickOutside(e: MouseEvent) {
               <!-- Date -->
               <div class="flex items-center justify-start sm:justify-center gap-2">
                 <span class="text-3xl text-purple-600">📅</span>
-                <p class="text-gray-100 font-semibold">10 июня 2025, 19:30</p>
+                <p class="text-gray-100 font-semibold">26 июня 2025, 19:30</p>
               </div>
 
               <!-- Location -->
