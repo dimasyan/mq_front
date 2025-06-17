@@ -186,7 +186,7 @@ function clickOutside(e: MouseEvent) {
 
           <div class="bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #4: Все Жанры и Эпохи</span>
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #4: Все Жанры</span>
             </h3>
 
             <!-- Game Info with Icons -->
