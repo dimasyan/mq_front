@@ -99,12 +99,12 @@ function validateForm() {
   clearErrors()
   let isValid = true
 
-  if (!teamName.value.trim()) {
+  if (!teamName.value.trim() && !isGuestPlayer.value) {
     errors.value.teamName = 'Введите название команды'
     isValid = false
   }
   if (!captainName.value.trim()) {
-    errors.value.captainName = 'Введите имя капитана'
+    errors.value.captainName = 'Введите Ваше имя'
     isValid = false
   }
   if (!phoneNumber.value.match(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/)) {
@@ -115,10 +115,13 @@ function validateForm() {
   return isValid
 }
 
+const isLoading = ref(false)
 const errorMessage = ref('')
 const submitForm = async () => {
+  if (isLoading.value) return
   try {
     if (validateForm()) {
+      isLoading.value = true
       const payload = {
         captainName: captainName.value,
         teamName: isGuestPlayer.value ? 'No team' : teamName.value,
@@ -135,6 +138,8 @@ const submitForm = async () => {
     } else {
       errorMessage.value = 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте снова.'
     }
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -390,7 +395,7 @@ function clickOutside(e: MouseEvent) {
               <input
                 type="text"
                 v-model="captainName"
-                placeholder="Ваши контакты"
+                placeholder="Ваше имя"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
               />
               <p v-if="errors.captainName" class="text-red-500 text-sm mt-1">{{ errors.captainName }}</p>
@@ -413,9 +418,21 @@ function clickOutside(e: MouseEvent) {
 
             <button
               type="submit"
-              class="w-full bg-purple-600 text-white font-bold py-3 rounded-full hover:bg-purple-700 transition"
+              :disabled="isLoading"
+              class="w-full bg-purple-600 text-white font-bold py-3 rounded-full hover:bg-purple-700 transition flex items-center justify-center"
             >
-              Отправить
+              <svg
+                v-if="isLoading"
+                class="animate-spin h-5 w-5 text-white mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              <span>{{ isLoading ? 'Отправка...' : 'Отправить' }}</span>
             </button>
           </form>
         </div>
