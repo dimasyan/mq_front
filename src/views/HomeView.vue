@@ -66,6 +66,7 @@ const isSubmitted = ref(false)
 const teamName = ref('')
 const captainName = ref('')
 const phoneNumber = ref('')
+const isGuestPlayer = ref(false)
 
 const errors = ref({
   teamName: '',
@@ -120,7 +121,7 @@ const submitForm = async () => {
     if (validateForm()) {
       const payload = {
         captainName: captainName.value,
-        teamName: teamName.value,
+        teamName: isGuestPlayer.value ? 'No team' : teamName.value,
         phoneNumber: phoneNumber.value,
       }
       const response = await axios.post('/api/registerteam', payload)
@@ -186,7 +187,7 @@ function clickOutside(e: MouseEvent) {
 
           <div class="bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #6: Большая музыкальная игра</span>
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #7: KZ и Зарубежка</span>
             </h3>
 
             <!-- Game Info with Icons -->
@@ -194,7 +195,7 @@ function clickOutside(e: MouseEvent) {
               <!-- Date -->
               <div class="flex items-center justify-start sm:justify-center gap-2">
                 <span class="text-3xl text-purple-600">📅</span>
-                <p class="text-gray-100 font-semibold">10 июля 2025, 19:30</p>
+                <p class="text-gray-100 font-semibold">22 июля 2025, 19:30</p>
               </div>
 
               <!-- Location -->
@@ -361,24 +362,35 @@ function clickOutside(e: MouseEvent) {
         <!-- If not yet submitted -->
         <div v-else>
           <h3 class="text-3xl font-semibold text-purple-700 mb-0">Регистрация на игру</h3>
-          <h4 class="text-2xl font-bold text-purple-900 mb-6">Ultra Music Mix #2</h4>
+          <h4 class="text-2xl font-bold text-purple-900 mb-6">Ultra Music Mix #7: KZ и Зарубежка</h4>
 
           <form @submit.prevent="submitForm" class="space-y-4">
             <div>
               <input
                 type="text"
                 v-model="teamName"
+                :disabled="isGuestPlayer"
                 placeholder="Название команды"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
               />
               <p v-if="errors.teamName" class="text-red-500 text-sm mt-1">{{ errors.teamName }}</p>
+
+              <div class="flex items-center mt-4">
+                <input
+                  type="checkbox"
+                  id="isGuestPlayer"
+                  v-model="isGuestPlayer"
+                  class="form-checkbox h-4 w-4 text-purple-500 border-gray-300 focus:ring-purple-400"
+                />
+                <label for="isGuestPlayer" class="ml-2 text-sm text-gray-700">Я легионер</label>
+              </div>
             </div>
 
             <div>
               <input
                 type="text"
                 v-model="captainName"
-                placeholder="Имя капитана"
+                placeholder="Ваши контакты"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
               />
               <p v-if="errors.captainName" class="text-red-500 text-sm mt-1">{{ errors.captainName }}</p>
