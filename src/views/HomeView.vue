@@ -192,7 +192,7 @@ function clickOutside(e: MouseEvent) {
 
           <div class="bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #8: Зарубежная музыка</span>
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #9: Все жанры и эпохи</span>
             </h3>
 
             <!-- Game Info with Icons -->
@@ -200,7 +200,7 @@ function clickOutside(e: MouseEvent) {
               <!-- Date -->
               <div class="flex items-center justify-start sm:justify-center gap-2">
                 <span class="text-3xl text-purple-600">📅</span>
-                <p class="text-gray-100 font-semibold">1 августа 2025, 19:30</p>
+                <p class="text-gray-100 font-semibold">7 августа 2025, 19:30</p>
               </div>
 
               <!-- Location -->
@@ -367,7 +367,7 @@ function clickOutside(e: MouseEvent) {
         <!-- If not yet submitted -->
         <div v-else>
           <h3 class="text-3xl font-semibold text-purple-700 mb-0">Регистрация на игру</h3>
-          <h4 class="text-2xl font-bold text-purple-900 mb-6">Ultra Music Mix #8: Зарубежная музыка</h4>
+          <h4 class="text-2xl font-bold text-purple-900 mb-6">Ultra Music Mix #9</h4>
 
           <form @submit.prevent="submitForm" class="space-y-4">
             <div>
