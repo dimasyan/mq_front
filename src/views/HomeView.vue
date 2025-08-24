@@ -221,7 +221,7 @@ function clickOutside(e: MouseEvent) {
 
             <!-- Register Button -->
             <button
-              @click="openRegistration('Ultra Mix 11')"
+              @click="openRegistration('Ultra Music Mix#11')"
               class="bg-purple-600 text-white text-2xl font-bold mt-4 px-8 py-4 rounded-full hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-md"
             >
               Записаться
@@ -230,9 +230,7 @@ function clickOutside(e: MouseEvent) {
 
         </div>
 
-        <div class="max-w-4xl mx-auto text-center">
-          <h2 class="text-4xl sm:text-5xl font-bold mb-10 text-purple-700">Ближайшие игры</h2>
-
+        <div class="max-w-4xl mx-auto text-center mt-5">
           <div class="bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
               <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Кино и Музыка #1</span>
