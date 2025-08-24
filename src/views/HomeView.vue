@@ -22,6 +22,7 @@ const sampleQuestions = reactive({
 const currentType = ref('text')
 const currentIndex = ref(0)
 const selectedAnswer = ref(null)
+const selectedGame = ref<string | null>(null)
 
 const currentQuestion = computed(() => {
   return sampleQuestions[currentType.value][currentIndex.value] || null
@@ -74,7 +75,8 @@ const errors = ref({
   phoneNumber: '',
 })
 
-function openRegistration() {
+function openRegistration(gameName: string) {
+  selectedGame.value = gameName
   isModalOpen.value = true
   isSubmitted.value = false
   teamName.value = ''
@@ -123,6 +125,7 @@ const submitForm = async () => {
     if (validateForm()) {
       isLoading.value = true
       const payload = {
+        game: selectedGame.value,
         captainName: captainName.value,
         teamName: isGuestPlayer.value ? 'No team' : teamName.value,
         phoneNumber: phoneNumber.value,
@@ -192,7 +195,7 @@ function clickOutside(e: MouseEvent) {
 
           <div class="bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #10: 2000е & 2010e</span>
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #11: Все эпохи и жанры</span>
             </h3>
 
             <!-- Game Info with Icons -->
@@ -200,7 +203,7 @@ function clickOutside(e: MouseEvent) {
               <!-- Date -->
               <div class="flex items-center justify-start sm:justify-center gap-2">
                 <span class="text-3xl text-purple-600">📅</span>
-                <p class="text-gray-100 font-semibold">22 августа 2025, 19:30</p>
+                <p class="text-gray-100 font-semibold">28 августа 2025, 19:30</p>
               </div>
 
               <!-- Location -->
@@ -218,7 +221,47 @@ function clickOutside(e: MouseEvent) {
 
             <!-- Register Button -->
             <button
-              @click="openRegistration"
+              @click="openRegistration('Ultra Mix 11')"
+              class="bg-purple-600 text-white text-2xl font-bold mt-4 px-8 py-4 rounded-full hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-md"
+            >
+              Записаться
+            </button>
+          </div>
+
+        </div>
+
+        <div class="max-w-4xl mx-auto text-center">
+          <h2 class="text-4xl sm:text-5xl font-bold mb-10 text-purple-700">Ближайшие игры</h2>
+
+          <div class="bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
+            <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Кино и Музыка #1</span>
+            </h3>
+
+            <!-- Game Info with Icons -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-lg mb-8">
+              <!-- Date -->
+              <div class="flex items-center justify-start sm:justify-center gap-2">
+                <span class="text-3xl text-purple-600">📅</span>
+                <p class="text-gray-100 font-semibold">29 августа 2025, 19:30</p>
+              </div>
+
+              <!-- Location -->
+              <div class="flex items-center justify-start sm:justify-center gap-3">
+                <span class="text-3xl text-purple-600">📍</span>
+                <p class="text-gray-200 font-semibold text-left sm:text-center">Хмельница, <br class="hidden sm:block"> ул. Карасай Батыра 193</p>
+              </div>
+
+              <!-- Status -->
+              <div class="flex items-center justify-start sm:justify-center gap-2">
+                <span class="text-3xl text-purple-600">✅</span>
+                <p class="text-green-200 font-semibold">Открыта запись</p>
+              </div>
+            </div>
+
+            <!-- Register Button -->
+            <button
+              @click="openRegistration('Кино и Музыка #1')"
               class="bg-purple-600 text-white text-2xl font-bold mt-4 px-8 py-4 rounded-full hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-md"
             >
               Записаться
@@ -367,7 +410,7 @@ function clickOutside(e: MouseEvent) {
         <!-- If not yet submitted -->
         <div v-else>
           <h3 class="text-3xl font-semibold text-purple-700 mb-0">Регистрация на игру</h3>
-          <h4 class="text-2xl font-bold text-purple-900 mb-6">Ultra Music Mix #10: 00e & 10e</h4>
+          <h4 class="text-2xl font-bold text-purple-900 mb-6">{{ selectedGame }}</h4>
 
           <form @submit.prevent="submitForm" class="space-y-4">
             <div>
