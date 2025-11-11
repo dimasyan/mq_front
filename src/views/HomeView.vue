@@ -205,12 +205,12 @@ function clickOutside(e: MouseEvent) {
 
     <div class="home-body">
       <section id="schedule" class="py-20 px-4 bg-gradient-to-r from-purple-100 to-indigo-300 text-white">
-        <div class="max-w-4xl mx-auto text-center">
+        <div class="max-w-4xl mx-auto text-center mb-6">
           <h2 class="text-4xl sm:text-5xl font-bold mb-10 text-purple-700">Ближайшие игры</h2>
 
           <div class="mb-8 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #20: Все эпохи и жанры</span>
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #21: 2000е & 2010е</span>
             </h3>
 
             <!-- Game Info with Icons -->
@@ -218,7 +218,7 @@ function clickOutside(e: MouseEvent) {
               <!-- Date -->
               <div class="flex items-center justify-start sm:justify-center gap-2">
                 <span class="text-3xl text-purple-600">📅</span>
-                <p class="text-gray-100 font-semibold">6 ноября 2025, 19:30</p>
+                <p class="text-gray-100 font-semibold">13 ноября 2025, 19:30</p>
               </div>
 
               <!-- Location -->
@@ -236,7 +236,47 @@ function clickOutside(e: MouseEvent) {
 
             <!-- Register Button -->
             <button
-              @click="openRegistration('Ultra Music Mix#20')"
+              @click="openRegistration('Ultra Music Mix#21')"
+              class="bg-purple-600 text-white text-2xl font-bold mt-4 px-8 py-4 rounded-full hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-md"
+            >
+              Записаться
+            </button>
+          </div>
+
+        </div>
+
+        <div class="max-w-4xl mx-auto text-center">
+          <h2 class="text-4xl sm:text-5xl font-bold mb-10 text-purple-700">Ближайшие игры</h2>
+
+          <div class="mb-8 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
+            <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #22: Зарубежная музыка</span>
+            </h3>
+
+            <!-- Game Info with Icons -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-lg mb-8">
+              <!-- Date -->
+              <div class="flex items-center justify-start sm:justify-center gap-2">
+                <span class="text-3xl text-purple-600">📅</span>
+                <p class="text-gray-100 font-semibold">19 ноября 2025, 19:30</p>
+              </div>
+
+              <!-- Location -->
+              <div class="flex items-center justify-start sm:justify-center gap-3">
+                <span class="text-3xl text-purple-600">📍</span>
+                <p class="text-gray-200 font-semibold text-left sm:text-center">лаунж-бар Avenue, <br class="hidden sm:block"> ул. Мынбаева 53</p>
+              </div>
+
+              <!-- Status -->
+              <div class="flex items-center justify-start sm:justify-center gap-2">
+                <span class="text-3xl text-purple-600">✅</span>
+                <p class="text-green-200 font-semibold">Открыта запись</p>
+              </div>
+            </div>
+
+            <!-- Register Button -->
+            <button
+              @click="openRegistration('Ultra Music Mix#22: Зарубежная музыка')"
               class="bg-purple-600 text-white text-2xl font-bold mt-4 px-8 py-4 rounded-full hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-md"
             >
               Записаться
