@@ -210,7 +210,7 @@ function clickOutside(e: MouseEvent) {
 
           <div class="mb-8 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #22: Зарубежная музыка</span>
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #23: Rock</span>
             </h3>
 
             <!-- Game Info with Icons -->
@@ -218,7 +218,42 @@ function clickOutside(e: MouseEvent) {
               <!-- Date -->
               <div class="flex items-center justify-start sm:justify-center gap-2">
                 <span class="text-3xl text-purple-600">📅</span>
-                <p class="text-gray-100 font-semibold">19 ноября 2025, 19:30</p>
+                <p class="text-gray-100 font-semibold">26 ноября 2025, 19:30</p>
+              </div>
+
+              <!-- Location -->
+              <div class="flex items-center justify-start sm:justify-center gap-3">
+                <span class="text-3xl text-purple-600">📍</span>
+                <p class="text-gray-200 font-semibold text-left sm:text-center">бар Хмельница, <br class="hidden sm:block"> ул. Карасай батыра 193</p>
+              </div>
+
+              <!-- Status -->
+              <div class="flex items-center justify-start sm:justify-center gap-2">
+                <span class="text-3xl text-purple-600">✅</span>
+                <p class="text-green-200 font-semibold">Открыта запись</p>
+              </div>
+            </div>
+
+            <!-- Register Button -->
+            <button
+              @click="openRegistration('Ultra Music Mix#23: Rock')"
+              class="bg-purple-600 text-white text-2xl font-bold mt-4 px-8 py-4 rounded-full hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-md"
+            >
+              Записаться
+            </button>
+          </div>
+
+          <div class="mb-8 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
+            <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #24: Все эпохи и жанры</span>
+            </h3>
+
+            <!-- Game Info with Icons -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-lg mb-8">
+              <!-- Date -->
+              <div class="flex items-center justify-start sm:justify-center gap-2">
+                <span class="text-3xl text-purple-600">📅</span>
+                <p class="text-gray-100 font-semibold">27 ноября 2025, 19:30</p>
               </div>
 
               <!-- Location -->
@@ -236,7 +271,7 @@ function clickOutside(e: MouseEvent) {
 
             <!-- Register Button -->
             <button
-              @click="openRegistration('Ultra Music Mix#22')"
+              @click="openRegistration('Ultra Music Mix#24')"
               class="bg-purple-600 text-white text-2xl font-bold mt-4 px-8 py-4 rounded-full hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-md"
             >
               Записаться
