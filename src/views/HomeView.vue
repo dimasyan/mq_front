@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { audioSamples, imgSamples, textSamples } from '@/utils/samples'
 import { Instagram } from 'lucide-vue-next'
 import TgIcon from '@/assets/tg.svg'
@@ -70,7 +70,7 @@ const isSubmitted = ref(false)
 const teamName = ref('')
 const captainName = ref('')
 const phoneNumber = ref('')
-const teamSize = ref(5)
+const teamSize = ref(null)
 const isGuestPlayer = ref(false)
 
 const errors = ref({
@@ -106,6 +106,7 @@ function clearErrors() {
 function validateForm() {
   clearErrors()
   let isValid = true
+  const numericTeamSize = Number(teamSize.value)
 
   if (!teamName.value.trim() && !isGuestPlayer.value) {
     errors.value.teamName = 'Введите название команды'
@@ -120,8 +121,13 @@ function validateForm() {
     isValid = false
   }
   if (!teamSize.value) {
-    errors.value.teamSize = 'Укажите количество игроков в команде'
-    isValid = false
+    errors.value.teamSize = 'Укажите количество участников'
+    return
+  }
+
+  if (Number.isNaN(numericTeamSize) || numericTeamSize < 1 || numericTeamSize > 12) {
+    errors.value.teamSize = 'Количество участников от 1 до 12'
+    return
   }
 
   return isValid
@@ -176,6 +182,7 @@ const submitForm = async () => {
       const data = await response.json()
       if (data.ok) {
         isSubmitted.value = true
+        teamSize.value = null
       } else {
         errorMessage.value = 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте снова.'
       }
@@ -212,6 +219,20 @@ const availableGames = computed(() => {
     )
   })
 })
+
+function onTeamSizeBlur() {
+  if (teamSize.value === null || teamSize.value === '') return
+
+  const value = Number(teamSize.value)
+  if (Number.isNaN(value)) {
+    teamSize.value = null
+    return
+  }
+
+  if (value < 1) teamSize.value = '1'
+  else if (value > 12) teamSize.value = '12'
+  else teamSize.value = String(value)
+}
 </script>
 
 <template>
@@ -484,6 +505,9 @@ const availableGames = computed(() => {
               <input
                 type="number"
                 v-model="teamSize"
+                min="1"
+                max="12"
+                @blur="onTeamSizeBlur"
                 placeholder="Игроков в команде"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
               />
