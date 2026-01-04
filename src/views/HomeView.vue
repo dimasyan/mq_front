@@ -5,6 +5,9 @@ import { Instagram } from 'lucide-vue-next'
 import TgIcon from '@/assets/tg.svg'
 import { vMaska } from "maska/vue"
 import axios from 'axios'
+import { GAMES, getNearestThursday, parseRuDate } from '@/utils/games'
+const botToken = import.meta.env.VITE_BOT_TOKEN
+const chatId = import.meta.env.VITE_CHAT_ID
 
 const types = ['text', 'image', 'audio']
 const typeLabels = {
@@ -67,12 +70,14 @@ const isSubmitted = ref(false)
 const teamName = ref('')
 const captainName = ref('')
 const phoneNumber = ref('')
+const teamSize = ref(5)
 const isGuestPlayer = ref(false)
 
 const errors = ref({
   teamName: '',
   captainName: '',
   phoneNumber: '',
+  teamSize: '',
 })
 
 function openRegistration(gameName: string) {
@@ -94,6 +99,7 @@ function clearErrors() {
     teamName: '',
     captainName: '',
     phoneNumber: '',
+    teamSize: '',
   }
 }
 
@@ -113,6 +119,10 @@ function validateForm() {
     errors.value.phoneNumber = 'Введите корректный номер телефона'
     isValid = false
   }
+  if (!teamSize.value) {
+    errors.value.teamSize = 'Укажите количество игроков в команде'
+    isValid = false
+  }
 
   return isValid
 }
@@ -129,16 +139,38 @@ const submitForm = async () => {
         captainName: captainName.value,
         teamName: isGuestPlayer.value ? 'No team' : teamName.value,
         phoneNumber: phoneNumber.value,
+        teamSize: teamSize.value,
       }
-      const BOT_TOKEN = '' // ⚠️ keep private if possible
-      const CHAT_ID = ''
+      const message = `
+      <b>🎮 Новая регистрация</b>
+
+      <b>Игра:</b>
+      ${payload.game}
+
+      <b>Капитан:</b>
+      ${payload.captainName}
+
+      <b>Команда:</b>
+      ${payload.teamName}
+
+      <b>Игроков:</b>
+      ${payload.teamSize}
+
+      <b>Телефон:</b>
+      <a href="tel:${payload.phoneNumber.replace(/\s|\(|\)|-/g, '')}">
+      ${payload.phoneNumber}
+      </a>
+      `
+      const BOT_TOKEN = botToken // ⚠️ keep private if possible
+      const CHAT_ID = chatId
       const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: CHAT_ID,
-          text: payload,
-          parse_mode: 'Markdown'
+          text: message,
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
         })
       })
       const data = await response.json()
@@ -166,6 +198,20 @@ function clickOutside(e: MouseEvent) {
     closeRegistration()
   }
 }
+
+const now = new Date()
+const nearestThursday = getNearestThursday(now)
+
+const availableGames = computed(() => {
+  return GAMES.filter(game => {
+    const gameDate = parseRuDate(game.date)
+
+    return (
+      gameDate >= now &&
+      gameDate <= nearestThursday
+    )
+  })
+})
 </script>
 
 <template>
@@ -208,9 +254,13 @@ function clickOutside(e: MouseEvent) {
         <div class="max-w-4xl mx-auto text-center">
           <h2 class="text-4xl sm:text-5xl font-bold mb-10 text-purple-700">Ближайшие игры</h2>
 
-          <div class="mb-8 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
+          <div
+            v-for="game in availableGames"
+            :key="game.id"
+            class="mb-8 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300"
+          >
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #29: Hip-Hop и R&B</span>
+              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">{{ game.name }}</span>
             </h3>
 
             <!-- Game Info with Icons -->
@@ -218,13 +268,13 @@ function clickOutside(e: MouseEvent) {
               <!-- Date -->
               <div class="flex items-center justify-start sm:justify-center gap-2">
                 <span class="text-3xl text-purple-600">📅</span>
-                <p class="text-gray-100 font-semibold">24 декабря 2025, 19:30</p>
+                <p class="text-gray-100 font-semibold">{{ game.date }}</p>
               </div>
 
               <!-- Location -->
               <div class="flex items-center justify-start sm:justify-center gap-3">
                 <span class="text-3xl text-purple-600">📍</span>
-                <p class="text-gray-200 font-semibold text-left sm:text-center">Avenue, <br class="hidden sm:block"> ул. Мынбаева 53</p>
+                <p class="text-gray-200 font-semibold text-left sm:text-center">{{ game.venue }}, <br class="hidden sm:block">{{ game.address }}</p>
               </div>
 
               <!-- Status -->
@@ -236,42 +286,7 @@ function clickOutside(e: MouseEvent) {
 
             <!-- Register Button -->
             <button
-              @click="openRegistration('Ultra Music Mix#29: Hip-Hop и R&B')"
-              class="bg-purple-600 text-white text-2xl font-bold mt-4 px-8 py-4 rounded-full hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-md"
-            >
-              Записаться
-            </button>
-          </div>
-
-          <div class="mb-8 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300">
-            <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">Ultra Music Mix #30: New Year</span>
-            </h3>
-
-            <!-- Game Info with Icons -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-lg mb-8">
-              <!-- Date -->
-              <div class="flex items-center justify-start sm:justify-center gap-2">
-                <span class="text-3xl text-purple-600">📅</span>
-                <p class="text-gray-100 font-semibold">25 декабря 2025, 19:30</p>
-              </div>
-
-              <!-- Location -->
-              <div class="flex items-center justify-start sm:justify-center gap-3">
-                <span class="text-3xl text-purple-600">📍</span>
-                <p class="text-gray-200 font-semibold text-left sm:text-center">лаунж-бар Avenue, <br class="hidden sm:block"> ул. Мынбаева 53</p>
-              </div>
-
-              <!-- Status -->
-              <div class="flex items-center justify-start sm:justify-center gap-2">
-                <span class="text-3xl text-purple-600">✅</span>
-                <p class="text-green-200 font-semibold">Открыта запись</p>
-              </div>
-            </div>
-
-            <!-- Register Button -->
-            <button
-              @click="openRegistration('Ultra Music Mix#30: New Year')"
+              @click="openRegistration(game.shortName)"
               class="bg-purple-600 text-white text-2xl font-bold mt-4 px-8 py-4 rounded-full hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-md"
             >
               Записаться
@@ -463,6 +478,16 @@ function clickOutside(e: MouseEvent) {
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
               />
               <p v-if="errors.phoneNumber" class="text-red-500 text-sm mt-1">{{ errors.phoneNumber }}</p>
+            </div>
+
+            <div>
+              <input
+                type="number"
+                v-model="teamSize"
+                placeholder="Игроков в команде"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
+              />
+              <p v-if="errors.teamSize" class="text-red-500 text-sm mt-1">{{ errors.teamSize }}</p>
             </div>
 
             <div v-if="errorMessage" class="text-red-500 text-sm mt-4 text-center">
