@@ -207,15 +207,15 @@ function clickOutside(e: MouseEvent) {
 }
 
 const now = new Date()
-const nearestThursday = getNearestThursday(now)
+// const nearestThursday = getNearestThursday(now)
 
 const availableGames = computed(() => {
   return GAMES.filter(game => {
     const gameDate = parseRuDate(game.date)
 
     return (
-      gameDate >= now &&
-      gameDate <= nearestThursday
+      gameDate >= now
+      // && gameDate <= nearestThursday
     )
   })
 })

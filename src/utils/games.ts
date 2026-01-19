@@ -33,8 +33,8 @@ export const GAMES = [
   },
   {
     id: 35,
-    name: 'Кино и Музыка: KZ и Зарубежное',
-    shortName: 'Кино и Музыка: KZ и Зарубежное',
+    name: 'Ultra Music Mix#35: KZ и Зарубежное',
+    shortName: 'Ultra Music Mix#35: KZ и Зарубежное',
     date: '29 января 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
