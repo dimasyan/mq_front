@@ -1,41 +1,57 @@
 export const GAMES = [
   {
-    id: 36,
-    name: 'Ultra Music Mix#36: Все эпохи и жанры',
-    shortName: 'Ultra Music Mix#36',
-    date: '5 февраля 2026, 19:30',
+    id: 41,
+    name: 'Ultra Music Mix#41: Зарубежная Музыка',
+    shortName: 'Ultra Music Mix#41: Зарубежная Музыка',
+    date: '5 марта 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
   {
-    id: 37,
-    name: 'Ultra Music Mix#37: Rap & RnB',
-    shortName: 'Ultra Music Mix#37: Rap & RnB',
-    date: '12 февраля 2026, 19:30',
+    id: 42,
+    name: 'Ultra Music Mix#42: Все эпохи и жанры',
+    shortName: 'Ultra Music Mix#42',
+    date: '12 марта 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
   {
-    id: 38,
-    name: 'Ultra Music Mix#38: 90е и 00е',
-    shortName: 'Ultra Music Mix#38: 90е и 00е',
-    date: '19 февраля 2026, 19:30',
+    id: 3,
+    name: 'Кино и Музыка#3',
+    shortName: 'Кино и Музыка#3',
+    date: '14 марта 2026, 17:00',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
   {
-    id: 39,
-    name: 'Ultra Music Mix#39: Happy Birthday',
-    shortName: 'Ultra Music Mix#39: Happy Birthday',
-    date: '26 февраля 2026, 19:30',
+    id: 43,
+    name: 'Ultra Music Mix#43: KZ и Зарубежка',
+    shortName: 'Ultra Music Mix#43: KZ и Зарубежка',
+    date: '19 марта 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
   {
-    id: 40,
-    name: 'Ultra Music Mix#40: Rock',
-    shortName: 'Ultra Music Mix#40: Rock',
-    date: '28 февраля 2026, 17:00',
+    id: 44,
+    name: 'Ultra Music Mix#44: Rap & RnB',
+    shortName: 'Ultra Music Mix#44: Rap & RnB',
+    date: '25 марта 2026, 19:30',
+    venue: 'Avenue',
+    address: ' ул. Мынбаева 53'
+  },
+  {
+    id: 45,
+    name: 'Ultra Music Mix#45: Все эпохи и жанры',
+    shortName: 'Ultra Music Mix#45: Все эпохи и жанры',
+    date: '26 марта 2026, 19:30',
+    venue: 'Avenue',
+    address: ' ул. Мынбаева 53'
+  },
+  {
+    id: 46,
+    name: 'Ultra Music Mix#46: Rock',
+    shortName: 'Ultra Music Mix#46: Rock',
+    date: '28 марта 2026, 17:00',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
