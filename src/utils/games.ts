@@ -1,36 +1,20 @@
 export const GAMES = [
   {
-    id: 47,
-    name: 'Ultra Music Mix#47: 90e и 00е',
-    shortName: 'Ultra Music Mix#47: 90e и 00е',
-    date: '2 апреля 2026, 19:30',
-    venue: 'Avenue',
-    address: ' ул. Мынбаева 53'
-  },
-  {
-    id: 4,
-    name: 'Кино и Музыка #4',
-    shortName: 'Кино и Музыка #4',
-    date: '4 апреля 2026, 17:00',
-    venue: 'Avenue',
-    address: ' ул. Мынбаева 53'
-  },
-  {
     id: 48,
-    name: 'Ultra Music Mix#48: Все эпохи и жанры',
-    shortName: 'Ultra Music Mix#48: Все эпохи и жанры',
+    name: 'Ultra Music Mix#48: Зарубежная музыка',
+    shortName: 'Ultra Music Mix#48: Зарубежная музыка',
     date: '9 апреля 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
   {
     id: 49,
-    name: 'Ultra Music Mix#49: Rock',
-    shortName: 'Ultra Music Mix#49: Rock',
+    name: 'Ultra Music Mix#49: Rap vs Rock',
+    shortName: 'Ultra Music Mix#49: Rap vs Rock',
     date: '11 апреля 2026, 17:00',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
-  },
+  },/*
   {
     id: 50,
     name: 'Ultra Music Mix#50: 2000e и 2010е',
@@ -70,7 +54,7 @@ export const GAMES = [
     date: '30 апреля 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
-  },
+  },*/
 ]
 
 const monthMap: Record<string, number> = {
