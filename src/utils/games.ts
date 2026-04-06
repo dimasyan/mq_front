@@ -14,11 +14,11 @@ export const GAMES = [
     date: '11 апреля 2026, 17:00',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
-  },/*
+  },
   {
     id: 50,
-    name: 'Ultra Music Mix#50: 2000e и 2010е',
-    shortName: 'Ultra Music Mix#50: 2000e и 2010е',
+    name: 'Ultra Music Mix#50: Все эпохи и жанры',
+    shortName: 'Ultra Music Mix#50: Все эпохи и жанры',
     date: '16 апреля 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
@@ -33,28 +33,36 @@ export const GAMES = [
   },
   {
     id: 52,
-    name: 'Ultra Music Mix#52: Все эпохи и жанры',
-    shortName: 'Ultra Music Mix#52: Все эпохи и жанры',
+    name: 'Кино и Музыка #4',
+    shortName: 'Кино и Музыка #4',
     date: '23 апреля 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
   {
     id: 53,
-    name: 'Ultra Music Mix#53: KZ и Зарубежка',
-    shortName: 'Ultra Music Mix#53: KZ и Зарубежка',
-    date: '26 апреля 2026, 16:00',
+    name: 'Ultra Music Mix#52: Rock',
+    shortName: 'Ultra Music Mix#52: Rock',
+    date: '26 апреля 2026, 16:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
   {
     id: 54,
-    name: 'Ultra Music Mix#54: Зарубежная музыка',
-    shortName: 'Ultra Music Mix#54: Зарубежная музыка',
+    name: 'Ultra Music Mix#53: Все эпохи и жанры',
+    shortName: 'Ultra Music Mix#53: Все эпохи и жанры',
     date: '30 апреля 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
-  },*/
+  },
+  {
+    id: 55,
+    name: 'Ultra Music Mix#54: KZ и Зарубежка',
+    shortName: 'Ultra Music Mix#54: KZ и Зарубежка',
+    date: '2 мая 2026, 17:00',
+    venue: 'Avenue',
+    address: ' ул. Мынбаева 53'
+  },
 ]
 
 const monthMap: Record<string, number> = {
