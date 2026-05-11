@@ -19,7 +19,7 @@ export const GAMES = [
     id: 57,
     name: 'Ultra Music Mix#57: Rap & RnB',
     shortName: 'Ultra Music Mix#57: Rap & RnB',
-    date: '16 мая 2026, 17:00',
+    date: '17 мая 2026, 17:00',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
