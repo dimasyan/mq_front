@@ -51,15 +51,7 @@ export const GAMES = [
     id: 5,
     name: 'Кино и Музыка#5',
     shortName: 'Кино и Музыка#5',
-    date: '28 мая 2026, 19:30',
-    venue: 'Avenue',
-    address: ' ул. Мынбаева 53'
-  },
-  {
-    id: 54,
-    name: 'Ultra Music Mix#60: 90е и 00е',
-    shortName: 'Ultra Music Mix#60: 90е и 00е',
-    date: '4 июня 2026, 19:30',
+    date: '31 мая 2026, 17:00',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
