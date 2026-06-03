@@ -1,57 +1,9 @@
 export const GAMES = [
   {
-    id: 55,
-    name: 'Ultra Music Mix#55: Все эпохи и жанры',
-    shortName: 'Ultra Music Mix#55: Все эпохи и жанры',
-    date: '7 мая 2026, 19:30',
-    venue: 'Avenue',
-    address: ' ул. Мынбаева 53'
-  },
-  {
-    id: 56,
-    name: 'Ultra Music Mix#56: 2000e и 2010е',
-    shortName: 'Ultra Music Mix#56: 2000e и 2010е',
-    date: '14 мая 2026, 19:30',
-    venue: 'Avenue',
-    address: ' ул. Мынбаева 53'
-  },
-  {
-    id: 57,
-    name: 'Ultra Music Mix#57: Rap & RnB',
-    shortName: 'Ultra Music Mix#57: Rap & RnB',
-    date: '17 мая 2026, 17:00',
-    venue: 'Avenue',
-    address: ' ул. Мынбаева 53'
-  },
-  {
-    id: 58,
-    name: 'Ultra Music Mix#58: Все эпохи и жанры',
-    shortName: 'Ultra Music Mix#58: Все эпохи и жанры',
-    date: '21 мая 2026, 19:30',
-    venue: 'Avenue',
-    address: ' ул. Мынбаева 53'
-  },
-  {
-    id: 1,
-    name: 'LINKIN PARK',
-    shortName: 'LINKIN PARK ',
-    date: '23 мая 2026, 17:00',
-    venue: 'Avenue',
-    address: ' ул. Мынбаева 53'
-  },
-  {
-    id: 59,
-    name: 'Ultra Music Mix#59: Rock',
-    shortName: 'Ultra Music Mix#59: Rock',
-    date: '27 мая 2026, 17:00',
-    venue: 'Avenue',
-    address: ' ул. Мынбаева 53'
-  },
-  {
-    id: 5,
-    name: 'Кино и Музыка#5',
-    shortName: 'Кино и Музыка#5',
-    date: '31 мая 2026, 17:00',
+    id: 60,
+    name: 'Ultra Music Mix#60: Зарубежная Музыка',
+    shortName: 'Ultra Music Mix#60: Зарубежная Музыка',
+    date: '4 июня 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
   },
