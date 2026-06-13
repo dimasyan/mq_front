@@ -1,8 +1,8 @@
 export const GAMES = [
   {
-    id: 5,
-    name: 'Ultra Music Mix#62: KZ и Зарубежка',
-    shortName: 'Ultra Music Mix#62: KZ и Зарубежка',
+    id: 62,
+    name: 'Ultra Music Mix#62 \n KZ и Зарубежка',
+    shortName: 'Ultra Music Mix#62 \n KZ и Зарубежка',
     date: '18 июня 2026, 19:30',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'
@@ -16,9 +16,9 @@ export const GAMES = [
     address: ' ул. Мынбаева 53'
   },
   {
-    id: 62,
-    name: 'Ultra Music Mix#63: Зарубежный Rap & RnB',
-    shortName: 'Ultra Music Mix#63: Зарубежный Rap & RnB',
+    id: 63,
+    name: 'Ultra Music Mix#63: Rap & RnB Зарубежка',
+    shortName: 'Ultra Music Mix#63: Rap & RnB Зарубежка',
     date: '21 июня 2026, 17:00',
     venue: 'Avenue',
     address: ' ул. Мынбаева 53'

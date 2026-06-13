@@ -233,6 +233,22 @@ function onTeamSizeBlur() {
   else if (value > 12) teamSize.value = '12'
   else teamSize.value = String(value)
 }
+
+function getGameClass(id: number) {
+  switch (id) {
+    case 62:
+      return 'game-kz'
+
+    case 1:
+      return 'game-rock'
+
+    case 63:
+      return 'game-rap'
+
+    default:
+      return ''
+  }
+}
 </script>
 
 <template>
@@ -278,10 +294,15 @@ function onTeamSizeBlur() {
           <div
             v-for="game in availableGames"
             :key="game.id"
+            :class="getGameClass(game.id)"
             class="mb-8 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl shadow-xl p-8 sm:p-12 text-center transform hover:scale-105 transition-all duration-300"
           >
             <h3 class="text-3xl sm:text-4xl text-gray-900 mb-6">
-              <span class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold">{{ game.name }}</span>
+              <span
+                class="inline-block bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text font-bold whitespace-pre-line"
+              >
+                {{ game.name }}
+              </span>
             </h3>
 
             <!-- Game Info with Icons -->
@@ -545,4 +566,130 @@ function onTeamSizeBlur() {
 </template>
 
 <style scoped lang="scss">
+.game-kz {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+        135deg,
+        rgba(183, 125, 255, 0.95) 0%,
+        rgba(108, 97, 255, 0.95) 45%,
+        rgba(74, 95, 255, 0.95) 100%
+    );
+
+  border-radius: 32px;
+}
+
+.game-kz::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  background-image: url('/src/assets/kz-overlay.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  pointer-events: none;
+}
+
+.game-kz > * {
+  position: relative;
+  z-index: 1;
+}
+
+.game-rock {
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(
+      135deg,
+      #8b5cf6 0%,
+      #6d4cff 45%,
+      #3f5efb 100%
+  );
+
+  border-radius: 32px;
+}
+
+.game-rock::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  background-image: url('src/assets/rock-overlay.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  opacity: 0.65;
+
+  pointer-events: none;
+}
+
+.game-rock > * {
+  position: relative;
+  z-index: 2;
+}
+
+.game-rock .game-title {
+  text-shadow:
+    0 0 10px rgba(255,255,255,.3),
+    0 2px 8px rgba(0,0,0,.4);
+}
+
+.game-rap {
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(
+      135deg,
+      #9d4edd 0%,
+      #6c3cff 50%,
+      #3b5bdb 100%
+  );
+}
+
+.game-rap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+
+  background-image: url('src/assets/rap-overlay.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  opacity: 0.55;
+
+  pointer-events: none;
+}
+
+.game-rap > * {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .game-kz::before {
+    background-position: right center;
+    background-size: cover;
+    opacity: 0.6;
+  }
+
+  .game-rock::before {
+    background-position: left center;
+    background-size: cover;
+    opacity: 0.6;
+  }
+
+  .game-rap::before {
+    background-position: right center;
+    background-size: cover;
+    opacity: 0.5;
+  }
+}
 </style>
