@@ -587,7 +587,7 @@ function getGameClass(id: number) {
   position: absolute;
   inset: 0;
 
-  background-image: url('/src/assets/kz-overlay.jpeg');
+  background-image: url('/kz-overlay.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -620,7 +620,7 @@ function getGameClass(id: number) {
   position: absolute;
   inset: 0;
 
-  background-image: url('src/assets/rock-overlay.jpeg');
+  background-image: url('/rock-overlay.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -658,7 +658,7 @@ function getGameClass(id: number) {
   position: absolute;
   inset: 0;
 
-  background-image: url('src/assets/rap-overlay.jpeg');
+  background-image: url('/rap-overlay.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
